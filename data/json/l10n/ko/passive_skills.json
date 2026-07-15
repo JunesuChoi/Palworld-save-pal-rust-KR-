@@ -1344,7 +1344,7 @@
     "description": "SAN 수치 쉽게 내려감 <NumRed_13>+15.0%</>"
   },
   "PAL_SpiritualInst": {
-    "localized_name": "ko_Text",
+    "localized_name": "정신 불안정",
     "description": null
   },
   "PAL_conceited": {

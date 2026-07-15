@@ -28,43 +28,43 @@
 	};
 
 	const endpoints: ApiEndpoint[] = [
-		{ id: 'info', label: 'Server Info', method: 'GET', hasPayload: false },
-		{ id: 'players', label: 'Players', method: 'GET', hasPayload: false },
-		{ id: 'settings', label: 'Settings', method: 'GET', hasPayload: false },
-		{ id: 'metrics', label: 'Metrics', method: 'GET', hasPayload: false },
-		{ id: 'save', label: 'Save World', method: 'POST', hasPayload: false },
+		{ id: 'info', label: '서버 정보', method: 'GET', hasPayload: false },
+		{ id: 'players', label: '플레이어 목록', method: 'GET', hasPayload: false },
+		{ id: 'settings', label: '서버 설정', method: 'GET', hasPayload: false },
+		{ id: 'metrics', label: '메트릭', method: 'GET', hasPayload: false },
+		{ id: 'save', label: '월드 저장', method: 'POST', hasPayload: false },
 		{
 			id: 'shutdown',
-			label: 'Shutdown',
+			label: '서버 종료',
 			method: 'POST',
 			hasPayload: true,
 			payloadTemplate: { waittime: '10', message: 'Server shutting down...' }
 		},
-		{ id: 'stop', label: 'Force Stop', method: 'POST', hasPayload: false },
+		{ id: 'stop', label: '강제 정지', method: 'POST', hasPayload: false },
 		{
 			id: 'announce',
-			label: 'Announce',
+			label: '서버 공지',
 			method: 'POST',
 			hasPayload: true,
 			payloadTemplate: { message: '' }
 		},
 		{
 			id: 'kick',
-			label: 'Kick Player',
+			label: '플레이어 추방',
 			method: 'POST',
 			hasPayload: true,
 			payloadTemplate: { userid: '', message: 'Kicked' }
 		},
 		{
 			id: 'ban',
-			label: 'Ban Player',
+			label: '플레이어 차단',
 			method: 'POST',
 			hasPayload: true,
 			payloadTemplate: { userid: '', message: 'Banned' }
 		},
 		{
 			id: 'unban',
-			label: 'Unban Player',
+			label: '플레이어 차단 해제',
 			method: 'POST',
 			hasPayload: true,
 			payloadTemplate: { userid: '' }
@@ -92,12 +92,12 @@
 </script>
 
 <div class="flex flex-col gap-4">
-	<h3 class="text-lg font-bold">REST API Console</h3>
+	<h3 class="text-lg font-bold">REST API 콘솔</h3>
 
 	{#if !isRunning}
 		<Card class="text-surface-400 text-center">
 			<Terminal size={32} class="mx-auto mb-2 opacity-50" />
-			<p>Server must be running to use the REST API</p>
+			<p>REST API를 사용하려면 서버가 작동 중이어야 합니다</p>
 		</Card>
 	{:else}
 		<!-- Endpoint selector -->
@@ -140,7 +140,7 @@
 		<div class="flex items-center gap-3">
 			<Button variant="primary" onclick={handleCall}>
 				<Send size={14} />
-				Send Request
+				요청 전송
 			</Button>
 			{#if hasResponse}
 				<span

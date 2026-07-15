@@ -13,7 +13,7 @@
   },
   "Accessory_AirDash3": {
     "localized_name": "트리플 에어 대시 부츠",
-    "description": "ko_Text"
+    "description": "장착하면 플레이어가 공중에서 대시를 3회 할 수 있도록 보조하는 장신구."
   },
   "Accessory_ExplosionResist": {
     "localized_name": "방폭 속옷",
@@ -360,8 +360,8 @@
     "description": "근대화를 거친 활. 더욱 강력한 화살을 발사할 수 있다."
   },
   "Battle_RangeWeapon_FlameThrower": {
-    "localized_name": "FlameThrower",
-    "description": "긴 사정거리의 불을 뿜는 Flamethrower. 적중한 상대에게 화상을 입힐 수 있다. |무기라인 공장 Ⅱ|에서 제작할 수 있다."
+    "localized_name": "화염방사기",
+    "description": "긴 사정거리의 불을 뿜는 화염방사기. 적중한 상대에게 화상을 입힐 수 있다. |무기라인 공장 Ⅱ|에서 제작할 수 있다."
   },
   "Battle_RangeWeapon_GatlingGun": {
     "localized_name": "개틀링 건",
@@ -501,11 +501,11 @@
   },
   "ChargeLaserRifle": {
     "localized_name": "충전식 소총",
-    "description": "ko_Text"
+    "description": "에너지를 모아 강력한 충전식 광선을 사출하는 소총. |고도 문명 무기라인 공장|에서 제작할 수 있다."
   },
   "ChargeLaserRifleBullet": {
     "localized_name": "충전식 소총 탄약",
-    "description": "ko_Text"
+    "description": "충전식 소총 등에 사용하는 탄."
   },
   "Clinic": {
     "localized_name": "진료소",
@@ -521,7 +521,7 @@
   },
   "Computer": {
     "localized_name": "컴퓨터",
-    "description": "ko_Text"
+    "description": "고화력 무기나 대형 시설을 제작하는 데 사용되는 정밀 컴퓨터."
   },
   "Cooler": {
     "localized_name": "얼음 냉방기",
@@ -625,11 +625,11 @@
   },
   "EnergyShotgun": {
     "localized_name": "에너지 산탄총",
-    "description": "ko_Text"
+    "description": "강력한 에너지를 사출하여 전방에 광범위한 타격을 가하는 산탄총. |고도 문명 무기라인 공장|에서 제작할 수 있다."
   },
   "EnergyShotgunBullet": {
     "localized_name": "에너지 산탄총 탄약",
-    "description": "ko_Text"
+    "description": "에너지 산탄총 등에 사용하는 탄약."
   },
   "EnergyStorage_Electric": {
     "localized_name": "축전기",
@@ -909,7 +909,7 @@
   },
   "GasMask": {
     "localized_name": "부식 안개 마스크",
-    "description": "ko_Text"
+    "description": "장착하면 부식성 안개 등의 해로운 영향으로부터 몸을 보호해 주는 방독 마스크."
   },
   "GatlingBullet": {
     "localized_name": "개틀링탄",
@@ -1205,15 +1205,15 @@
   },
   "OperatingTable": {
     "localized_name": "팰 수술대",
-    "description": "ko_Text"
+    "description": "팰의 성별이나 패시브 스킬을 변경하기 위한 수술을 집도할 수 있는 시설."
   },
   "OverheatRifle": {
     "localized_name": "전자동 소총",
-    "description": "ko_Text"
+    "description": "매우 빠른 연사 속도를 지녔지만 쉽게 열을 받는 소총. |고도 문명 무기라인 공장|에서 제작할 수 있다."
   },
   "OverheatRifleBullet": {
     "localized_name": "전자동 소총 탄약",
-    "description": "ko_Text"
+    "description": "전자동 소총 등에 사용하는 탄약."
   },
   "PALBOX": {
     "localized_name": "팰 상자",
@@ -1225,11 +1225,11 @@
   },
   "PalDopingShot": {
     "localized_name": "부스트 건",
-    "description": "ko_Text"
+    "description": "아군 팰에게 주사액을 조준 발사하여 일시적으로 능력을 강화시키는 도핑 건."
   },
   "PalDopingShotBullet": {
     "localized_name": "부스트 건 탄약",
-    "description": "ko_Text"
+    "description": "부스트 건 등에 사용하는 특수 탄약."
   },
   "PalDopingShot_2": {
     "localized_name": "메가 부스트 건",
@@ -1241,7 +1241,7 @@
   },
   "PalHealingGrenade": {
     "localized_name": "팰 회복 수류탄",
-    "description": "ko_Text"
+    "description": "던져서 폭발시키면 범위 내 아군 팰의 HP를 회복시키는 회복용 수류탄."
   },
   "PalMedicineBox": {
     "localized_name": "약 선반",
@@ -2292,8 +2292,8 @@
     "description": "가지고 있으면 금 열쇠필요한 보물 상자의 자물쇠를 억지로 딸 수 있게 된다. 아무리 많이 써도 고장 나지 않는다."
   },
   "WallSignboard": {
-    "localized_name": "WallSignBoard",
-    "description": "문자를 쓸 수 있는 간판. 벽에 걸 수 있다."
+    "localized_name": "벽걸이 표지판",
+    "description": "문자를 쓸 수 있는 표지판. 벽에 걸 수 있다."
   },
   "WallTorch": {
     "localized_name": "벽걸이 횃불",

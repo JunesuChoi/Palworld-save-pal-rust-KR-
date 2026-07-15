@@ -95,12 +95,12 @@
 	{#if isNative}
 		<!-- Native server mod panel -->
 		<div class="flex items-center justify-between">
-			<h3 class="text-lg font-bold">Mods</h3>
+			<h3 class="text-lg font-bold">모드 목록</h3>
 			<label
 				class="btn bg-primary-500 hover:bg-primary-600 flex cursor-pointer items-center gap-2 rounded-sm px-3 py-1.5 text-sm"
 			>
 				<Upload size={14} />
-				Install (.zip)
+				모드 설치 (.zip)
 				<input type="file" accept=".zip" class="hidden" onchange={handleNativeInstall} />
 			</label>
 		</div>
@@ -112,19 +112,19 @@
 			</div>
 		{:else}
 			<div class="text-surface-500 text-xs">
-				No Steam Workshop directory configured. Mods can be installed via ZIP upload.
+				Steam 워크숍 디렉토리가 설정되지 않았습니다. 모드는 ZIP 업로드를 통해 설치할 수 있습니다.
 			</div>
 		{/if}
 
 		{#if mods.length === 0}
 			<Card class="text-surface-400 text-center">
 				<Package size={32} class="mx-auto mb-2 opacity-50" />
-				<p>No mods found</p>
+				<p>설치된 모드가 없습니다</p>
 				<p class="mt-1 text-xs">
 					{#if server.workshop_dir}
-						Subscribe to mods in Steam Workshop or install via ZIP
+						Steam 워크숍에서 모드를 구독하거나 ZIP을 통해 설치하세요
 					{:else}
-						Install mod ZIPs or configure a Steam Workshop directory
+						모드 ZIP 파일을 설치하거나 Steam 워크숍 디렉토리를 설정하세요
 					{/if}
 				</p>
 			</Card>
@@ -180,7 +180,7 @@
 									: 'bg-surface-700 text-surface-400'}"
 								onclick={() => handleToggle(mod)}
 							>
-								{mod.enabled ? 'Enabled' : 'Disabled'}
+								{mod.enabled ? '활성화됨' : '비활성화됨'}
 							</button>
 						</div>
 					</Card>
@@ -190,7 +190,7 @@
 	{:else}
 		<!-- Docker server mod panel (unchanged) -->
 		<div class="flex items-center justify-between">
-			<h3 class="text-lg font-bold">Mods</h3>
+			<h3 class="text-lg font-bold">모드 목록</h3>
 			<div class="flex items-center gap-2">
 				<div class="flex overflow-hidden rounded-sm text-xs">
 					{#each (['ue4ss', 'logic', 'native'] as const) as t (t)}
@@ -220,14 +220,14 @@
 		{#if mods.length === 0}
 			<Card class="text-surface-400 text-center">
 				<Package size={32} class="mx-auto mb-2 opacity-50" />
-				<p>No mods installed</p>
+				<p>설치된 모드가 없습니다</p>
 			</Card>
 		{:else}
 			{#if nativeMods.length > 0}
 				<div>
 					<h4 class="text-surface-400 mb-2 flex items-center gap-2 text-xs font-medium uppercase">
 						<Shield size={12} />
-						Native / Proxy DLL Mods
+						Native / Proxy DLL 모드
 					</h4>
 					<div class="flex flex-col gap-2">
 						{#each nativeMods as mod (mod.mod_name)}
@@ -240,7 +240,7 @@
 											<span class="text-orange-400 ml-2 text-xs">native</span>
 										</div>
 									</div>
-									<span class="text-xs text-green-400">Synced on boot</span>
+									<span class="text-xs text-green-400">부팅 시 동기화됨</span>
 								</div>
 							</Card>
 						{/each}
@@ -252,7 +252,7 @@
 				<div>
 					<h4 class="text-surface-400 mb-2 flex items-center gap-2 text-xs font-medium uppercase">
 						<Package size={12} />
-						UE4SS Mods
+						UE4SS 모드
 					</h4>
 					<div class="flex flex-col gap-2">
 						{#each ue4ssMods as mod (mod.mod_name)}
@@ -271,7 +271,7 @@
 											: 'bg-surface-700 text-surface-400'}"
 										onclick={() => handleToggle(mod)}
 									>
-										{mod.enabled ? 'Enabled' : 'Disabled'}
+										{mod.enabled ? '활성화됨' : '비활성화됨'}
 									</button>
 								</div>
 							</Card>
@@ -284,7 +284,7 @@
 				<div>
 					<h4 class="text-surface-400 mb-2 flex items-center gap-2 text-xs font-medium uppercase">
 						<Package size={12} />
-						Logic Mods (.pak)
+						Logic 모드 (.pak)
 					</h4>
 					<div class="flex flex-col gap-2">
 						{#each logicMods as mod (mod.mod_name)}
@@ -294,7 +294,7 @@
 										<Package size={16} class="text-purple-400" />
 										<span class="text-sm font-medium">{mod.mod_name}</span>
 									</div>
-									<span class="text-xs text-green-400">Active</span>
+									<span class="text-xs text-green-400">활성화됨</span>
 								</div>
 							</Card>
 						{/each}

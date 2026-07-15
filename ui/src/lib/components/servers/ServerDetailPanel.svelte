@@ -75,19 +75,19 @@
 	});
 
 	const tabs: { id: Tab; label: string; icon: typeof Settings }[] = [
-		{ id: 'overview', label: 'Overview', icon: LayoutDashboard },
-		{ id: 'settings', label: 'Settings', icon: Settings },
-		{ id: 'mods', label: 'Mods', icon: Package },
-		{ id: 'console', label: 'Console', icon: Terminal },
-		{ id: 'saves', label: 'Saves', icon: FolderOpen }
+		{ id: 'overview', label: '개요', icon: LayoutDashboard },
+		{ id: 'settings', label: '설정', icon: Settings },
+		{ id: 'mods', label: '모드 목록', icon: Package },
+		{ id: 'console', label: '콘솔', icon: Terminal },
+		{ id: 'saves', label: '세이브', icon: FolderOpen }
 	];
 
 	async function handleDelete() {
 		const confirmed = await modal.showConfirmModal({
-			title: 'Delete Server',
-			message: `Are you sure you want to delete "${server.name}"? This will stop the container and remove it. Server data on disk will be preserved.`,
-			confirmText: 'Delete',
-			cancelText: 'Cancel'
+			title: '서버 삭제',
+			message: `"${server.name}" 서버를 삭제하시겠습니까? 이 작업은 도커 컨테이너를 정지하고 제거하지만, 디스크의 서버 데이터는 보존됩니다.`,
+			confirmText: '삭제',
+			cancelText: '취소'
 		});
 		if (confirmed) {
 			await serverState.deleteServer(server.id);
@@ -120,10 +120,10 @@
 			>
 				{#if isRunning}
 					<Square size={14} class={cn('mr-2 inline', 'text-red-400')} />
-					Stop
+					정지
 				{:else}
 					<Play size={14} class={cn('mr-2 inline', 'text-green-400')} />
-					Start
+					시작
 				{/if}
 			</Button>
 			<Button variant="ghost" size="icon" onclick={handleDelete}>
@@ -157,45 +157,45 @@
 				<!-- Server info -->
 				<div class="grid grid-cols-2 gap-4">
 					<Card>
-						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">Status</h4>
+						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">상태</h4>
 						<p class={cn('text-lg font-bold capitalize', statusColor)}>
 							{server.status?.status ?? 'Unknown'}
 						</p>
 					</Card>
 					<Card>
-						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">Online Players</h4>
+						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">접속 중인 플레이어</h4>
 						<p class="flex items-center gap-2 text-lg font-bold">
 							<Users size={18} class="text-green-400" />
 							{server.player_count ?? 0} / {server.max_players}
 						</p>
 					</Card>
 					<Card>
-						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">Total Players</h4>
+						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">전체 플레이어</h4>
 						<p class="flex items-center gap-2 text-lg font-bold">
 							<Users size={18} class="text-surface-400" />
 							{server.total_players ?? 0}
 						</p>
 						{#if (server.total_players ?? 0) > 0}
 							<p class="text-surface-400 text-xs">
-								{Math.max(0, (server.total_players ?? 0) - (server.player_count ?? 0))} offline
+								{Math.max(0, (server.total_players ?? 0) - (server.player_count ?? 0))} 오프라인
 							</p>
 						{/if}
 					</Card>
 					<Card>
-						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">Game Port</h4>
+						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">게임 포트</h4>
 						<p class="text-lg font-bold">{server.game_port}</p>
 					</Card>
 					<Card>
-						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">REST API Port</h4>
+						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">REST API 포트</h4>
 						<p class="text-lg font-bold">{server.rest_api_port}</p>
 					</Card>
 					<Card>
-						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">Server Name</h4>
+						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">서버 이름</h4>
 						<p class="font-medium">{server.server_name}</p>
 					</Card>
 					<Card>
 						<h4 class="text-surface-400 mb-1 text-xs font-medium uppercase">
-							{isNative ? 'Install Path' : 'Image'}
+							{isNative ? '설치 경로' : '이미지'}
 						</h4>
 						<p class="font-medium break-all">
 							{isNative ? server.install_path : server.image_name}
@@ -206,7 +206,7 @@
 				<!-- Container stats -->
 				{#if isRunning && stats}
 					<h4 class="text-surface-400 mt-2 text-xs font-medium uppercase">
-						{isNative ? 'Process Resources' : 'Container Resources'}
+						{isNative ? '프로세스 리소스' : '컨테이너 리소스'}
 					</h4>
 					<div class="grid grid-cols-2 gap-4">
 						<Card>
@@ -219,7 +219,7 @@
 						<Card>
 							<div class="flex items-center gap-2">
 								<MemoryStick size={16} class="text-purple-400" />
-								<h4 class="text-surface-400 text-xs font-medium uppercase">Memory</h4>
+								<h4 class="text-surface-400 text-xs font-medium uppercase">메모리</h4>
 							</div>
 							<p class="mt-1 text-2xl font-bold">{stats.mem_percent}%</p>
 							<p class="text-surface-400 text-xs">
@@ -229,7 +229,7 @@
 						<Card>
 							<div class="flex items-center gap-2">
 								<Network size={16} class="text-green-400" />
-								<h4 class="text-surface-400 text-xs font-medium uppercase">Network</h4>
+								<h4 class="text-surface-400 text-xs font-medium uppercase">네트워크</h4>
 							</div>
 							<div class="mt-1 grid grid-cols-2 gap-2">
 								<div>
@@ -245,15 +245,15 @@
 						<Card>
 							<div class="flex items-center gap-2">
 								<HardDrive size={16} class="text-orange-400" />
-								<h4 class="text-surface-400 text-xs font-medium uppercase">Disk I/O</h4>
+								<h4 class="text-surface-400 text-xs font-medium uppercase">디스크 I/O</h4>
 							</div>
 							<div class="mt-1 grid grid-cols-2 gap-2">
 								<div>
-									<p class="text-surface-400 text-[10px]">Read</p>
+									<p class="text-surface-400 text-[10px]">읽기</p>
 									<p class="text-sm font-bold">{stats.disk_read_mb} MB</p>
 								</div>
 								<div>
-									<p class="text-surface-400 text-[10px]">Write</p>
+									<p class="text-surface-400 text-[10px]">쓰기</p>
 									<p class="text-sm font-bold">{stats.disk_write_mb} MB</p>
 								</div>
 							</div>
@@ -261,7 +261,7 @@
 					</div>
 				{:else if isRunning}
 					<Card class="text-surface-400 text-center text-sm">
-						Loading {isNative ? 'process' : 'container'} stats...
+						상태 로딩 중...
 					</Card>
 				{/if}
 			</div>

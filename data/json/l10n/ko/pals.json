@@ -356,7 +356,7 @@
     "description": "본래 팔라디우스와(과) 하나의 존재였다. 부정적 감정이 분리된 존재로 여겨지나 눈동자 속에는 일말의 자비가 반짝인다."
   },
   "BlackFurDragon": {
-    "localized_name": "ko_Text",
+    "localized_name": "드라고스트로프",
     "description": "심연에서 온 침묵의 존재. 그대, 이 용의 등에 타지 말지어다. 그대, 이 용에게 소리치지 말지어다."
   },
   "BlackGriffon": {
@@ -588,8 +588,8 @@
     "description": "건기엔 신경질적이어서 항상 까칠하다. 같은 무리끼리의 사소한 충돌도 우당탕탕 큰 싸움으로 번진다."
   },
   "ElecLion": {
-    "localized_name": "ko_Text",
-    "description": "ko_Text"
+    "localized_name": "볼트메인",
+    "description": "움직일수록 가열되며 털끝이 점점 더 밝게 빛난다. 최고조에 달하면 너무 눈이 부셔 직접 쳐다보면 실명할 위험이 있다."
   },
   "ElecLizard": {
     "localized_name": "밍기저드",
@@ -2480,7 +2480,7 @@
     "description": "비나이트을(를) 총괄하는 선택받은 여왕. 위대한 여왕을 위해 일한다는 기쁨으로 죽을 때까지 일하는 하인이 끊이지 않는다."
   },
   "QuestMan": {
-    "localized_name": "ko_Text",
+    "localized_name": "퀘스트 의뢰인",
     "description": null
   },
   "Quest_Farmer03_PinkCat": {
@@ -3040,7 +3040,7 @@
     "description": "성에는 임금님께서 좋아하시는 꽃이 잔뜩 피어 있었습니다. 어느 날 큰 싸움이 벌어져, 성까지 불이 옮겨붙으려 하고 있었습니다. 바로 그곳에서, 한 꽃의 정령이 나타났습니다. - 동화 '임금님의 꽃'에서 발췌."
   },
   "VisitingMerchant": {
-    "localized_name": "ko_Text",
+    "localized_name": "방문 상인",
     "description": null
   },
   "Visitor_Hunter_Rifle": {
@@ -3072,7 +3072,7 @@
     "description": "건강한 개체라면 등에 흐르는 물질이 안정적인 온도를 유지한다. 가슴이 두근거리면 온도가 점점 불안정해지며 최악의 경우 기화와 응고를 일으켜 갑작스러운 쇼크사로 사망한다."
   },
   "WeaponsDealer": {
-    "localized_name": "ko_Text",
+    "localized_name": "무기 상인",
     "description": null
   },
   "WeaselDragon": {

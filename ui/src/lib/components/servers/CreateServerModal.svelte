@@ -13,7 +13,7 @@
 	import { Search } from 'lucide-svelte';
 
 	let {
-		title = 'Create Server',
+		title = '서버 생성',
 		suggestedPorts = { game_port: 8211, query_port: 27015, rest_api_port: 8212 },
 		closeModal
 	} = $props<{
@@ -32,29 +32,29 @@
 	let activeTab: Tab = $state('general');
 
 	const tabs: { id: Tab; label: string }[] = [
-		{ id: 'general', label: 'General' },
-		{ id: 'gameplay', label: 'Gameplay' },
-		{ id: 'advanced', label: 'Advanced' }
+		{ id: 'general', label: '일반' },
+		{ id: 'gameplay', label: '게임플레이' },
+		{ id: 'advanced', label: '고급' }
 	];
 
 	// General tab groups (shown directly)
-	const generalGroupTitles = ['Server Settings', 'REST API & Logging'];
+	const generalGroupTitles = ['서버 설정', 'REST API 및 로깅'];
 	// Gameplay tab groups
 	const gameplayGroupTitles = [
-		'Gameplay Rates',
-		'Time & Difficulty',
-		'PvP / Hardcore',
-		'Guild / Building',
-		'Items & Drops'
+		'게임플레이 배율',
+		'시간 및 난이도',
+		'PvP / 하드코어',
+		'길드 및 건축',
+		'아이템 및 드롭'
 	];
 	// Advanced tab groups
 	const advancedGroupTitles = [
-		'Backup Settings',
-		'Auto Update / Reboot',
-		'Discord Integration',
-		'UE4SS / Mods',
-		'Engine Settings',
-		'Randomizer'
+		'백업 설정',
+		'자동 업데이트 및 재부팅',
+		'디스코드 연동',
+		'UE4SS 및 모드',
+		'엔진 및 성능',
+		'랜덤마이저'
 	];
 
 	function groupsForTab(tab: Tab) {
@@ -120,7 +120,7 @@
 		envVars = envVars;
 	}
 
-	async function handleDetectWorkshop() {
+	async function handle감지Workshop() {
 		detectingWorkshop = true;
 		serverState.detectedWorkshopDir = '';
 		await serverState.detectWorkshopDir();
@@ -183,7 +183,7 @@
 				class="text-surface-400 hover:text-secondary-400 flex items-center gap-1 text-xs transition-colors"
 			>
 				<ExternalLink size={12} />
-				Official Docs
+				공식 문서
 			</a>
 		</div>
 
@@ -209,7 +209,7 @@
 				)}
 				onclick={() => (serverType = 'native')}
 			>
-				Native (Windows)
+				로컬/SteamCMD
 			</button>
 		</div>
 
@@ -234,43 +234,43 @@
 		<div class="max-h-[60vh] overflow-y-auto pr-1">
 			{#if activeTab === 'general'}
 				<div class="flex flex-col gap-3">
-					<Input label="Display Name" bind:value={name} placeholder="My Palworld Server" />
+					<Input label="표시 이름" bind:value={name} placeholder="내 팰월드 서버" />
 
 					{#if serverType === 'docker'}
 						<Input
-							label="Container Name"
+							label="컨테이너 이름"
 							bind:value={containerName}
 							placeholder={autoContainerName}
 						/>
 					{:else}
 						<!-- Native server fields -->
 						<Input
-							label="SteamCMD Path (optional, auto-detected)"
+							label="SteamCMD 경로 (선택 사항, 자동 감지)"
 							bind:value={steamcmdPath}
-							placeholder="Leave empty to auto-detect or download"
+							placeholder="비워 두면 자동으로 감지하거나 다운로드합니다"
 						/>
 						<Input
-							label="Install Base Path"
+							label="설치 기본 경로"
 							bind:value={installBasePath}
 							placeholder="C:\PalworldServers"
 						/>
-						<Input label="World Name (folder name)" bind:value={worldName} placeholder="MyWorld" />
+						<Input label="월드 이름 (폴더명)" bind:value={worldName} placeholder="MyWorld" />
 						{#if installPath}
 							<p class="text-surface-400 -mt-1 text-xs">
-								Install path: <span class="text-surface-200 font-mono">{installPath}</span>
+								설치 경로: <span class="text-surface-200 font-mono">{installPath}</span>
 							</p>
 						{/if}
 						<Input
-							label="Extra Launch Args"
+							label="추가 실행 인수"
 							bind:value={launchArgs}
 							placeholder="-publiclobby -NumberOfWorkerThreadsServer=8"
 						/>
 						<div class="flex items-end gap-2">
 							<div class="flex-1">
 								<Input
-									label="Steam Workshop Dir (optional)"
+									label="Steam 워크숍 디렉토리 (선택 사항)"
 									bind:value={workshopDir}
-									placeholder="Auto-detected on create, or browse to set"
+									placeholder="생성 시 자동 감지되거나 찾아보기를 통해 설정할 수 있습니다"
 								/>
 							</div>
 							<Button
@@ -278,30 +278,30 @@
 								variant="neutral"
 								size="sm"
 								class="mb-0.5"
-								onclick={handleDetectWorkshop}
+								onclick={handle감지Workshop}
 								disabled={detectingWorkshop}
 							>
 								<Search size={14} />
-								{detectingWorkshop ? 'Detecting...' : 'Detect'}
+								{detectingWorkshop ? '감지 중...' : '감지'}
 							</Button>
 						</div>
 					{/if}
 
-					<Input label="Server Name (in-game)" bind:value={serverName} />
-					<Input label="Server Description" bind:value={serverDescription} />
+					<Input label="서버 이름 (인게임)" bind:value={serverName} />
+					<Input label="서버 설명" bind:value={serverDescription} />
 
 					<div class="grid grid-cols-3 gap-3">
-						<Input label="Game Port" type="number" bind:value={gamePort} />
-						<Input label="Query Port" type="number" bind:value={queryPort} />
-						<Input label="REST API Port" type="number" bind:value={restApiPort} />
+						<Input label="게임 포트" type="number" bind:value={gamePort} />
+						<Input label="쿼리 포트" type="number" bind:value={queryPort} />
+						<Input label="REST API 포트" type="number" bind:value={restApiPort} />
 					</div>
 
 					<div class="grid grid-cols-2 gap-3">
-						<Input label="Server Password" bind:value={serverPassword} placeholder="(optional)" />
-						<Input label="Admin Password" bind:value={adminPassword} />
+						<Input label="서버 비밀번호" bind:value={serverPassword} placeholder="(선택 사항)" />
+						<Input label="관리자 비밀번호" bind:value={adminPassword} />
 					</div>
 
-					<Input label="Max Players" type="number" bind:value={maxPlayers} min={1} max={32} />
+					<Input label="최대 플레이어 수" type="number" bind:value={maxPlayers} min={1} max={32} />
 
 					<!-- General ENV groups -->
 					<Accordion collapsible>
@@ -372,7 +372,7 @@
 					</Button>
 				{/snippet}
 				{#snippet popup()}
-					<span>Create</span>
+					<span>생성</span>
 				{/snippet}
 			</Tooltip>
 			<Tooltip position="bottom">
@@ -382,7 +382,7 @@
 					</Button>
 				{/snippet}
 				{#snippet popup()}
-					<span>Cancel</span>
+					<span>취소</span>
 				{/snippet}
 			</Tooltip>
 		</div>

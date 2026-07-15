@@ -4220,24 +4220,24 @@
     "description": "ko Text"
   },
   "FlameThrower": {
-    "localized_name": "FlameThrower",
-    "description": "높은 사정거리의 불을 뿜는 Flamethrower. 적중한 상대를 화염에 휩싸이게 할 수 있다."
+    "localized_name": "화염방사기",
+    "description": "높은 사정거리의 불을 뿜는 화염방사기. 적중한 상대를 화염에 휩싸이게 할 수 있다."
   },
   "FlameThrower_2": {
-    "localized_name": "FlameThrower",
-    "description": "높은 사정거리의 불을 뿜는 Flamethrower. 적중한 상대를 화염에 휩싸이게 할 수 있다."
+    "localized_name": "화염방사기",
+    "description": "높은 사정거리의 불을 뿜는 화염방사기. 적중한 상대를 화염에 휩싸이게 할 수 있다."
   },
   "FlameThrower_3": {
-    "localized_name": "FlameThrower",
-    "description": "높은 사정거리의 불을 뿜는 Flamethrower. 적중한 상대를 화염에 휩싸이게 할 수 있다."
+    "localized_name": "화염방사기",
+    "description": "높은 사정거리의 불을 뿜는 화염방사기. 적중한 상대를 화염에 휩싸이게 할 수 있다."
   },
   "FlameThrower_4": {
-    "localized_name": "FlameThrower",
-    "description": "높은 사정거리의 불을 뿜는 Flamethrower. 적중한 상대를 화염에 휩싸이게 할 수 있다."
+    "localized_name": "화염방사기",
+    "description": "높은 사정거리의 불을 뿜는 화염방사기. 적중한 상대를 화염에 휩싸이게 할 수 있다."
   },
   "FlameThrower_5": {
-    "localized_name": "FlameThrower",
-    "description": "높은 사정거리의 불을 뿜는 Flamethrower. 적중한 상대를 화염에 휩싸이게 할 수 있다."
+    "localized_name": "화염방사기",
+    "description": "높은 사정거리의 불을 뿜는 화염방사기. 적중한 상대를 화염에 휩싸이게 할 수 있다."
   },
   "FlamethrowerBullet": {
     "localized_name": "화염방사기 연료",
@@ -5628,7 +5628,7 @@
     "description": "너덜너덜하게 분쇄된 어떤 생물의 생체 조직. 유전자를 복원시킨 팰을 해체하면 생기는 잔류물로 더 이상 쓸모가 없기에 팔거나 버릴 수밖에 없다."
   },
   "Meat": {
-    "localized_name": "Meat",
+    "localized_name": "고기",
     "description": "팰 고기. 사람이 날것으로 먹어도 될 만큼 신선하다."
   },
   "Meat2": {

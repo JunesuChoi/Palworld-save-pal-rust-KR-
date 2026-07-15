@@ -368,8 +368,8 @@
     "description": "장식용 천락의 민족 깃발."
   },
   "Decal_PalSticker_PinkCat": {
-    "localized_name": "ko_Text",
-    "description": "ko_Text"
+    "localized_name": "캐티바 데칼",
+    "description": "캐티바 데칼"
   },
   "DefenseBowGun": {
     "localized_name": "설치형 쇠뇌",
@@ -1276,8 +1276,8 @@
     "description": "장식용 앤티크 기다란 사각 카펫."
   },
   "Rug_Wood": {
-    "localized_name": "ko_Text",
-    "description": "ko_Text"
+    "localized_name": "모피 카펫",
+    "description": "장식용 모피 카펫."
   },
   "SF_Chair": {
     "localized_name": "연구실 의자",
@@ -1808,8 +1808,8 @@
     "description": "밟은 팰을 빙결시키는 덫. 빙결된 팰은 스피어에 잡힐 확률이 상승한다."
   },
   "Trap_MovingPanel": {
-    "localized_name": "ko_Text",
-    "description": "ko_Text"
+    "localized_name": "무빙 패널",
+    "description": "이동식 패널."
   },
   "Trap_Noose": {
     "localized_name": "공중 덫",

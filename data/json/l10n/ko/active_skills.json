@@ -889,7 +889,7 @@
   },
   "EPalWazaID::Unique_LilyQueen_WindBarrier": {
     "localized_name": "윈드 배리어",
-    "description": "ko_Text"
+    "description": "릴린 전용 스킬. 자신의 주위에 바람 장벽을 생성하여, 공격해 온 적에게 바람의 칼날을 되돌려준다."
   },
   "EPalWazaID::Unique_LotusDragon_LotusBloom": {
     "localized_name": "피어나는 연꽃",
