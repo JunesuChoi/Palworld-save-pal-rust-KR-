@@ -5,7 +5,7 @@
   "identifier": "com.palworldsavepal.desktop",
   "build": {
     "beforeDevCommand": {
-      "script": "bun run dev:desktop",
+      "script": "npm run dev:desktop",
       "cwd": "../ui"
     },
     "devUrl": "http://localhost:5173",

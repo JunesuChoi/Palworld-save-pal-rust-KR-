@@ -57,7 +57,7 @@
 					<div class="flex items-center space-x-2">
 						<span>{m.about_check_out()}</span>
 						<a
-							href="https://github.com/oMaN-Rod/palworld-save-pal"
+							href="https://github.com/JunesuChoi/Palworld-save-pal-rust-KR"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="text-primary-400 hover:text-primary-300 z-10 hover:underline"><Github /></a

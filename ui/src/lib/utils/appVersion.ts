@@ -2,7 +2,7 @@ export async function isUpdateAvailableOnGitHub(version: string): Promise<boolea
 	try {
 		// Call GitHub API to check for latest release
 		const response = await fetch(
-			'https://api.github.com/repos/oMaN-Rod/palworld-save-pal/releases/latest'
+			'https://api.github.com/repos/JunesuChoi/Palworld-save-pal-rust-KR/releases/latest'
 		);
 
 		if (!response.ok) {

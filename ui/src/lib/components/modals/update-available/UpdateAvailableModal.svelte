@@ -20,7 +20,7 @@
 
 			<div class="mt-2 flex flex-row items-center justify-end space-x-2">
 				<Button
-					href="https://github.com/oMaN-Rod/palworld-save-pal/releases"
+					href="https://github.com/JunesuChoi/Palworld-save-pal-rust-KR/releases"
 					variant="primary"
 					target="_blank"
 					rel="noopener noreferrer">{m.update_now()}</Button

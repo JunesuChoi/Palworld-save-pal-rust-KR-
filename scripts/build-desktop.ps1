@@ -13,9 +13,28 @@ $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $repoRoot
 
-if (-not (Get-Command "cargo-tauri" -ErrorAction SilentlyContinue) -and
-    -not (cargo tauri --version 2>$null)) {
-    throw "cargo-tauri not found. Install it: cargo install tauri-cli --version '^2' --locked"
+# Ensure cargo is in PATH
+if ($env:PATH -notlike "*C:\Users\trsy\.cargo\bin*") {
+    $env:PATH += ";C:\Users\trsy\.cargo\bin"
+}
+
+$tauriCmd = "cargo"
+$tauriArgs = @("tauri", "build", "--bundles", "msi")
+
+# Safely check if tauri cargo command is available without triggering stderr errors
+$cargoList = cargo --list
+$hasTauri = $false
+foreach ($line in $cargoList) {
+    if ($line -like "*tauri*") {
+        $hasTauri = $true
+        break
+    }
+}
+
+if (-not (Get-Command "cargo-tauri" -ErrorAction SilentlyContinue) -and -not $hasTauri) {
+    Write-Host "cargo-tauri not found. Falling back to npx @tauri-apps/cli..."
+    $tauriCmd = "npx"
+    $tauriArgs = @("@tauri-apps/cli", "build", "--bundles", "msi")
 }
 
 $version = (Select-String -Path "Cargo.toml" -Pattern '^version = "([^"]*)"').Matches[0].Groups[1].Value
@@ -27,8 +46,8 @@ if (-not $SkipUi) {
 
 Push-Location "psp-desktop"
 try {
-    cargo tauri build --bundles msi
-    if ($LASTEXITCODE -ne 0) { throw "cargo tauri build failed" }
+    & $tauriCmd $tauriArgs
+    if ($LASTEXITCODE -ne 0) { throw "$tauriCmd build failed" }
 }
 finally { Pop-Location }
 

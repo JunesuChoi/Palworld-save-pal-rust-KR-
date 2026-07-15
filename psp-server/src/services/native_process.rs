@@ -243,7 +243,15 @@ pub fn start_server_process(record: &ServerRecord) -> Option<u32> {
         const CREATE_NEW_PROCESS_GROUP: u32 = 0x0000_0200;
         command.creation_flags(CREATE_NEW_PROCESS_GROUP);
     }
-    command.spawn().ok().map(|child| child.id())
+    if let Some(pid) = command.spawn().ok().map(|child| child.id()) {
+        let record_clone = record.clone();
+        tokio::spawn(async move {
+            monitor_discord_alerts(record_clone, pid).await;
+        });
+        Some(pid)
+    } else {
+        None
+    }
 }
 
 fn pid_alive(pid: u32) -> bool {
@@ -402,6 +410,87 @@ pub fn process_stats(pid: Option<i64>) -> Option<Value> {
         "disk_read_mb": round_to(total_disk_read as f64 / MB, 2),
         "disk_write_mb": round_to(total_disk_write as f64 / MB, 2)
     }))
+}
+
+async fn monitor_discord_alerts(record: psp_db::servers::ServerRecord, pid: u32) {
+    use std::collections::HashSet;
+    use std::time::Duration;
+
+    let webhook_url = record.env_vars.get("DISCORD_WEBHOOK_URL")
+        .and_then(|v| v.as_str())
+        .map(|s| s.to_string());
+
+    let webhook_url = match webhook_url {
+        Some(url) if !url.is_empty() => url,
+        _ => return,
+    };
+
+    let client = reqwest::Client::new();
+
+    let send_webhook = |msg: String| {
+        let client_clone = client.clone();
+        let url_clone = webhook_url.clone();
+        tokio::spawn(async move {
+            let _ = client_clone.post(&url_clone)
+                .json(&serde_json::json!({ "content": msg }))
+                .send()
+                .await;
+        });
+    };
+
+    send_webhook("🎮 **팰월드 서버 시작 중...**\n서버가 가동되고 있습니다. 잠시만 기다려주세요.".to_string());
+
+    let api_client = PalworldApiClient::new();
+    let mut is_online = false;
+    let mut online_players: HashSet<String> = HashSet::new();
+    let mut player_names: std::collections::HashMap<String, String> = std::collections::HashMap::new();
+
+    loop {
+        if !pid_alive(pid) {
+            break;
+        }
+
+        match api_client.rest_api_call("127.0.0.1", record.rest_api_port as u16, &record.admin_password, "players", "GET", None).await {
+            Ok(result) => {
+                let status_code = result.get("status_code").and_then(|v| v.as_u64()).unwrap_or(0);
+                if status_code == 200 {
+                    if !is_online {
+                        is_online = true;
+                        send_webhook(format!("✅ **팰월드 서버가 온라인 상태입니다!**\n접속 포트: {}\n지금 접속하실 수 있습니다!", record.game_port));
+                    }
+
+                    if let Some(players_list) = result.get("data").and_then(|d| d.get("players")).and_then(|p| p.as_array()) {
+                        let mut current_pids = HashSet::new();
+                        for p in players_list {
+                            if let (Some(p_id), Some(p_name)) = (p.get("playerId").and_then(|v| v.as_str()), p.get("name").and_then(|v| v.as_str())) {
+                                let acc_name = p.get("accountName").and_then(|v| v.as_str()).unwrap_or("");
+                                let p_id_str = p_id.to_string();
+                                current_pids.insert(p_id_str.clone());
+                                player_names.insert(p_id_str.clone(), p_name.to_string());
+
+                                if !online_players.contains(&p_id_str) {
+                                    online_players.insert(p_id_str.clone());
+                                    send_webhook(format!("📥 **플레이어 접속**\n• 닉네임: `{}`\n• 계정명: `{}`", p_name, acc_name));
+                                }
+                            }
+                        }
+
+                        let left_pids: Vec<String> = online_players.difference(&current_pids).cloned().collect();
+                        for p_id_str in left_pids {
+                            let p_name = player_names.get(&p_id_str).map(|s| s.as_str()).unwrap_or("알 수 없음");
+                            send_webhook(format!("📤 **플레이어 퇴장**\n• 닉네임: `{}`", p_name));
+                            online_players.remove(&p_id_str);
+                        }
+                    }
+                }
+            }
+            Err(_) => {}
+        }
+
+        tokio::time::sleep(Duration::from_secs(5)).await;
+    }
+
+    send_webhook("📕 **팰월드 서버가 중지되었습니다.**".to_string());
 }
 
 #[cfg(test)]
