@@ -56,20 +56,20 @@ New-Item -ItemType Directory -Force -Path $dist | Out-Null
 
 # MSI installer.
 $msi = Get-ChildItem "target/release/bundle/msi/*.msi" | Select-Object -First 1
-Copy-Item $msi.FullName (Join-Path $dist "PalworldSavePal-$version-windows.msi")
+Copy-Item $msi.FullName (Join-Path $dist "PalworldSavePal-KR-$version-windows.msi")
 
 # Portable standalone: exe + ui_build + data in one folder, zipped.
-$staging = Join-Path $dist "PalworldSavePal"
+$staging = Join-Path $dist "PalworldSavePal-KR"
 if (Test-Path $staging) { Remove-Item -Recurse -Force $staging }
 New-Item -ItemType Directory -Force -Path $staging | Out-Null
 Copy-Item "target/release/psp.exe" (Join-Path $staging "psp.exe")
 Copy-Item -Recurse "ui_build" (Join-Path $staging "ui_build")
 Copy-Item -Recurse "data" (Join-Path $staging "data")
 
-$zip = Join-Path $dist "PalworldSavePal-$version-windows-standalone.zip"
+$zip = Join-Path $dist "PalworldSavePal-KR-$version-windows-standalone.zip"
 if (Test-Path $zip) { Remove-Item -Force $zip }
 Compress-Archive -Path $staging -DestinationPath $zip
 Remove-Item -Recurse -Force $staging
 
 Write-Host "Done. Artifacts in dist/:"
-Get-ChildItem $dist -Filter "PalworldSavePal-$version-windows*" | ForEach-Object { Write-Host "  $($_.Name)" }
+Get-ChildItem $dist -Filter "PalworldSavePal-KR-$version-windows*" | ForEach-Object { Write-Host "  $($_.Name)" }

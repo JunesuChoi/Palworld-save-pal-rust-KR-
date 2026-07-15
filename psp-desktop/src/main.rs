@@ -138,7 +138,7 @@ fn main() {
                 .replace(server_handle);
 
             WebviewWindowBuilder::new(&app_handle, "main", WebviewUrl::External(webview_url))
-                .title(format!("Palworld Save Pal v{}", env!("CARGO_PKG_VERSION")))
+                .title(format!("팰월드 세이브 팰 한국버전 v{}", env!("CARGO_PKG_VERSION")))
                 .inner_size(1366.0, 768.0)
                 .min_inner_size(1366.0, 768.0)
                 .build()?;
@@ -146,7 +146,7 @@ fn main() {
             Ok(())
         })
         .build(tauri::generate_context!())
-        .expect("failed to build Palworld Save Pal desktop app")
+        .expect("failed to build 팰월드 세이브 팰 한국버전 desktop app")
         .run(|app, event| {
             if let RunEvent::Exit = event {
                 // The server runs in-process, so exiting just means awaiting its
