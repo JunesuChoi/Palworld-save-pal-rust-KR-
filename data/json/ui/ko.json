@@ -792,5 +792,6 @@
   "world_name": "세계 이름",
   "xbox_game_pass": "Xbox 게임 패스",
   "xbox_game_pass_description": "Xbox Game Pass: container.index 파일",
-  "zoom_in_out": "확대/축소"
+  "zoom_in_out": "확대/축소",
+  "servers": "서버 목록"
 }

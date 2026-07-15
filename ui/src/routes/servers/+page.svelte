@@ -65,7 +65,7 @@
 
 		// @ts-ignore
 		const result = await modal.showModal<CreateServerData | null>(CreateServerModal, {
-			title: 'Create Server',
+			title: '서버 생성',
 			suggestedPorts
 		});
 
@@ -79,10 +79,10 @@
 	<!-- Server List Panel -->
 	<div class="flex w-80 shrink-0 flex-col gap-4">
 		<div class="flex items-center justify-between">
-			<h2 class="text-primary-400 text-xl font-bold">Servers</h2>
+			<h2 class="text-primary-400 text-xl font-bold">서버 목록</h2>
 			<Button variant="primary" size="sm" class="flex items-center gap-2" onclick={handleCreate}>
 				<Plus size={14} />
-				New
+				새 서버
 			</Button>
 		</div>
 
@@ -99,8 +99,8 @@
 			{#if servers.length === 0 && !loading}
 				<Card class="text-surface-400 text-center">
 					<Server size={32} class="mx-auto mb-2 opacity-50" />
-					<p>No servers configured</p>
-					<p class="mt-1 text-sm">Create one to get started</p>
+					<p>설정된 서버가 없습니다</p>
+					<p class="mt-1 text-sm">시작하려면 새 서버를 생성하세요</p>
 				</Card>
 			{:else}
 				{#each servers as server (server.id)}
@@ -124,7 +124,7 @@
 			<div class="text-surface-400 flex h-full items-center justify-center">
 				<div class="text-center">
 					<Server size={48} class="mx-auto mb-4 opacity-30" />
-					<p class="text-lg">Select a server to view details</p>
+					<p class="text-lg">서버를 선택하면 상세 정보가 표시됩니다</p>
 				</div>
 			</div>
 		{/if}

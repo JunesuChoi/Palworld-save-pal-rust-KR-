@@ -151,7 +151,7 @@ export const navItems: NavItem[] = [
 		id: 'servers',
 		section: 'tiles',
 		icon: () => Server,
-		label: () => 'Servers',
+		label: () => m.servers(),
 		href: '/servers'
 	},
 	{
