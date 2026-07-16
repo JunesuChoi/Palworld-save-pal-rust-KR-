@@ -36,7 +36,7 @@
 <div class="flex h-full w-full flex-col items-center justify-center">
 	<div class="flex w-full max-w-[1080px] flex-col px-4">
 		<div class="flex items-center">
-			<img src={staticIcons.sadIcon} alt="Sad face icon" class="mr-2 h-14 w-14" />
+			<img src={staticIcons.sadIcon} alt={m.error_sad_face_icon()} class="mr-2 h-14 w-14" />
 			<h1 class="text-4xl font-bold">{m.oops_something_wrong()}</h1>
 		</div>
 
@@ -56,7 +56,7 @@
 							variant="secondary"
 							size="sm"
 							onclick={copyErrorToClipboard}
-							aria-label="Copy error details to clipboard"
+							aria-label={m.error_copy_to_clipboard_label()}
 						>
 							<Copy size={20} />
 						</Button>

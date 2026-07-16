@@ -37,10 +37,10 @@
 				URL.revokeObjectURL(url);
 			} catch (error) {
 				console.error('Error saving file:', error);
-				toast.add('Failed to save file.');
+				toast.add(m.editor_failed_to_save());
 			}
 		} else {
-			toast.add('Nothing to save.');
+			toast.add(m.editor_nothing_to_save());
 		}
 	}
 
@@ -88,7 +88,7 @@
 					formatted = true;
 					content = { text: prettyJson };
 				} catch (error) {
-					console.error('Error converting file:', error);
+					console.error(m.editor_error_converting(), error);
 					content = undefined;
 				}
 				isLoading = false;

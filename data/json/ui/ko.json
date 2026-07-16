@@ -897,5 +897,19 @@
   "editor_close_file_title": "파일 닫기",
   "editor_close_btn": "닫기",
   "editor_edit_sav_header": "SAV 편집",
-  "editor_drag_drop_sav_msg": "*.sav 파일을 여기로 드래그 앤 드롭 하세요"
+  "editor_drag_drop_sav_msg": "*.sav 파일을 여기로 드래그 앤 드롭 하세요",
+  "docs_attributes": "속성",
+  "docs_yes": "예",
+  "docs_no": "아니오",
+  "docs_none": "없음",
+  "docs_locked_to": "지정 팰",
+  "editor_failed_to_save": "파일 저장에 실패했습니다.",
+  "editor_nothing_to_save": "저장할 내용이 없습니다.",
+  "editor_error_saving": "파일 저장 중 오류가 발생했습니다:",
+  "editor_error_converting": "파일 변환 중 오류가 발생했습니다:",
+  "upload_uploading_zip": "압축 파일 업로드 중...",
+  "upload_starting_to_cook": "세이브 파일 변환 처리 시작 중...",
+  "error_failed_to_copy_details": "오류 정보를 복사하지 못했습니다:",
+  "error_sad_face_icon": "슬픈 표정 아이콘",
+  "error_copy_to_clipboard_label": "오류 상세 내용을 클립보드에 복사"
 }

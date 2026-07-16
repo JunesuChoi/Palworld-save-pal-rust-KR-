@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from '$i18n/messages';
 	import { Tooltip } from '$components/ui';
 	import {
 		activeSkillsData,
@@ -59,7 +60,7 @@
 
 	function getPassiveSkillIconFilter(skillId: string): string {
 		const skill = passiveSkillsData.getByKey(skillId);
-		if (!skill || skill.localized_name === 'None') return '';
+		if (!skill || skill.localized_name === 'None' || skill.localized_name === '없음') return '';
 		switch (skill.details.rank) {
 			case 1:
 				return '';
@@ -77,7 +78,7 @@
 <div class="space-y-4">
 	<div class="grid grid-cols-2 gap-2">
 		<div class="flex flex-col">
-			<h5 class="h5 border-b-surface-600 mb-2 border-b-2 py-4">Attributes</h5>
+			<h5 class="h5 border-b-surface-600 mb-2 border-b-2 py-4">{m.docs_attributes()}</h5>
 			<div class="flex w-full justify-center gap-2 rounded-sm p-4">
 				<div class="flex flex-col items-center justify-center">
 					<Rating value={preset.pal_preset.rank} count={4} itemClasses="text-gray" disabled />
@@ -137,19 +138,19 @@
 							</div>
 						{/snippet}
 						<div class="grid grid-cols-2 gap-2">
-							{@render label('Lucky', preset.pal_preset!.is_lucky ? 'Yes' : 'No')}
-							{@render label('Alpha', preset.pal_preset!.is_boss ? 'Yes' : 'No')}
+							{@render label(m.lucky_pals({ pals: '' }), preset.pal_preset!.is_lucky ? m.docs_yes() : m.docs_no())}
+							{@render label(m.alpha_pal({ pals: '' }), preset.pal_preset!.is_boss ? m.docs_yes() : m.docs_no())}
 							{#if preset.pal_preset!.gender}
-								{@render label('Gender', preset.pal_preset!.gender)}
+								{@render label(m.gender(), m[preset.pal_preset!.gender.toLowerCase()] ? m[preset.pal_preset!.gender.toLowerCase()]() : preset.pal_preset!.gender)}
 							{/if}
 							{#if preset.pal_preset?.level}
-								{@render label('Level', preset.pal_preset!.level)}
+								{@render label(m.level(), preset.pal_preset!.level)}
 							{/if}
 							{#if preset.pal_preset?.rank}
-								{@render label('Rank', preset.pal_preset!.rank)}
+								{@render label(m.docs_rank(), preset.pal_preset!.rank)}
 							{/if}
 							{#if preset.pal_preset?.lock}
-								{@render label('Locked to', preset.pal_preset!.character_id || 'None')}
+								{@render label(m.docs_locked_to(), preset.pal_preset!.character_id || m.docs_none())}
 							{/if}
 						</div>
 					{/snippet}
@@ -158,7 +159,7 @@
 		</div>
 
 		<div class="space-y-2">
-			<h5 class="h5 border-b-surface-600 mb-2 border-b-2 py-4">Stats</h5>
+			<h5 class="h5 border-b-surface-600 mb-2 border-b-2 py-4">{m.stats()}</h5>
 			<div class="flex flex-col">
 				<span class="text-surface-300 mr-1">IVs</span>
 				<div class="flex justify-center space-x-2">
@@ -216,11 +217,11 @@
 
 	{#if preset.pal_preset.active_skills?.length || preset.pal_preset.passive_skills?.length || preset.pal_preset.learned_skills?.length}
 		<div>
-			<h5 class="h5 border-b-surface-600 mb-2 border-b-2 py-4">Skills</h5>
+			<h5 class="h5 border-b-surface-600 mb-2 border-b-2 py-4">{m.skills()}</h5>
 			<div class="grid grid-cols-2 gap-2">
 				{#if preset.pal_preset.active_skills && preset.pal_preset.active_skills.length > 0}
 					<div class="flex gap-2 rounded-sm p-4">
-						<span class="font-bold">Active Skills:</span>
+						<span class="font-bold">{m.active_skill({ count: 2 })}:</span>
 						<span class="border-r-surface-600 border-r pr-2">
 							{preset.pal_preset.active_skills.length}
 						</span>
@@ -251,7 +252,7 @@
 
 				{#if preset.pal_preset.passive_skills && preset.pal_preset.passive_skills.length > 0}
 					<div class="flex gap-2 rounded-sm p-4">
-						<span class="font-bold">Passive Skills:</span>
+						<span class="font-bold">{m.passive_skill({ count: 2 })}:</span>
 						<span class="border-r-surface-600 border-r pr-2">
 							{preset.pal_preset.passive_skills.length}
 						</span>
@@ -280,7 +281,7 @@
 
 				{#if preset.pal_preset.learned_skills && preset.pal_preset.learned_skills.length > 0}
 					<div class="">
-						<span class="font-bold">Learned Skills:</span>
+						<span class="font-bold">{m.learned_skills()}:</span>
 						{preset.pal_preset.learned_skills.length}
 					</div>
 				{/if}
@@ -289,7 +290,7 @@
 	{/if}
 
 	{#if preset.pal_preset.work_suitability && Object.keys(preset.pal_preset.work_suitability).length > 0}
-		<h5 class="h5 border-b-surface-600 mb-2 border-b-2 py-4">Work Suitability</h5>
+		<h5 class="h5 border-b-surface-600 mb-2 border-b-2 py-4">{m.docs_work_suitability()}</h5>
 		<div class="flex gap-2">
 			{#each Object.entries(preset.pal_preset.work_suitability) as [ws, value]}
 				{@const suitability: WorkSuitability = ws as WorkSuitability}

@@ -916,5 +916,19 @@
   "editor_close_file_title": "Close file",
   "editor_close_btn": "Close",
   "editor_edit_sav_header": "Edit SAV",
-  "editor_drag_drop_sav_msg": "Drag and drop a *.sav file here"
+  "editor_drag_drop_sav_msg": "Drag and drop a *.sav file here",
+  "docs_attributes": "Attributes",
+  "docs_yes": "Yes",
+  "docs_no": "No",
+  "docs_none": "None",
+  "docs_locked_to": "Locked to",
+  "editor_failed_to_save": "Failed to save file.",
+  "editor_nothing_to_save": "Nothing to save.",
+  "editor_error_saving": "Error saving file:",
+  "editor_error_converting": "Error converting file:",
+  "upload_uploading_zip": "Uploading zip file...",
+  "upload_starting_to_cook": "Starting to cook...",
+  "error_failed_to_copy_details": "Failed to copy error details:",
+  "error_sad_face_icon": "Sad face icon",
+  "error_copy_to_clipboard_label": "Copy error details to clipboard"
 }
