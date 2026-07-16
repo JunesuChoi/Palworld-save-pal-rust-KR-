@@ -680,6 +680,21 @@ pub async fn handle_start_server(
             return Ok(());
         };
         let (success, status) = if record.server_type == "native" {
+            let update_on_boot = record
+                .env_vars
+                .get("UPDATE_ON_BOOT")
+                .and_then(|v| {
+                    v.as_str()
+                        .map(|s| s == "true")
+                        .or_else(|| v.as_bool())
+                })
+                .unwrap_or(false);
+
+            if update_on_boot && !record.steamcmd_path.is_empty() {
+                tracing::info!("UPDATE_ON_BOOT is enabled. Checking/applying updates via SteamCMD...");
+                let _ = native_process::install_server(&record.steamcmd_path, &record.install_path).await;
+            }
+
             let new_pid = native_process::start_server_process(&record);
             if let Some(pid) = new_pid {
                 let mut pid_update = serde_json::Map::new();
