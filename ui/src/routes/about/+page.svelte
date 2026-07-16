@@ -6,6 +6,8 @@
 	import { staticIcons } from '$types/icons';
 	import * as m from '$i18n/messages';
 	import { c } from '$lib/utils/commonTranslations';
+	import { send } from '$lib/utils/websocketUtils';
+	import { MessageType } from '$types';
 
 	const appState = getAppState();
 
@@ -56,11 +58,9 @@
 					</Tooltip>
 					<div class="flex items-center space-x-2">
 						<span>{m.about_check_out()}</span>
-						<a
-							href="https://github.com/JunesuChoi/Palworld-save-pal-rust-KR-"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="text-primary-400 hover:text-primary-300 z-10 hover:underline"><Github /></a
+						<button
+							onclick={() => send(MessageType.OPEN_IN_BROWSER, "https://github.com/JunesuChoi/Palworld-save-pal-rust-KR-")}
+							class="text-primary-400 hover:text-primary-300 z-10 hover:underline"><Github /></button
 						>
 						<span>{m.about_for_more_info()}</span>
 					</div>

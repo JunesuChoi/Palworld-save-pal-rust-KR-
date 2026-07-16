@@ -2,10 +2,17 @@
 	import { Button, Card } from '$components/ui';
 	import * as m from '$i18n/messages';
 	import { c } from '$lib/utils/commonTranslations';
+	import { send } from '$lib/utils/websocketUtils';
+	import { MessageType } from '$types';
 
 	let { closeModal } = $props<{
 		closeModal: (value: [string, number]) => void;
 	}>();
+
+	function handleUpdateNow() {
+		send(MessageType.OPEN_IN_BROWSER, "https://github.com/JunesuChoi/Palworld-save-pal-rust-KR-/releases");
+		closeModal(null);
+	}
 
 	function handleLater() {
 		closeModal(null);
@@ -20,10 +27,8 @@
 
 			<div class="mt-2 flex flex-row items-center justify-end space-x-2">
 				<Button
-					href="https://github.com/JunesuChoi/Palworld-save-pal-rust-KR-/releases"
 					variant="primary"
-					target="_blank"
-					rel="noopener noreferrer">{m.update_now()}</Button
+					onclick={handleUpdateNow}>{m.update_now()}</Button
 				>
 				<Button variant="ghost" onclick={handleLater}>{m.later()}</Button>
 			</div>

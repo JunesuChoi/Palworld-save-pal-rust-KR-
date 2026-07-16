@@ -127,7 +127,11 @@ pub async fn handle_open_in_browser(
     data: String,
     ctx: &mut HandlerCtx<'_>,
 ) -> Result<(), HandlerError> {
-    let url = browser_url_from(&data);
+    let url = if data.starts_with("http://") || data.starts_with("https://") {
+        data
+    } else {
+        browser_url_from(&data)
+    };
     opener::open(&url).map_err(|open_error| {
         HandlerError::Other(format!("Failed to open browser: {open_error}"))
     })?;
