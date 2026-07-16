@@ -136,16 +136,16 @@
 					controlHover="hover:bg-secondary-500/25"
 				>
 					{#snippet lead()}<SlidersHorizontal class="h-4 w-4" />{/snippet}
-					{#snippet control()}<span class="text-sm font-bold">Filter & Sort</span>{/snippet}
+					{#snippet control()}<span class="text-sm font-bold">{m.docs_filter_sort()}</span>{/snippet}
 					{#snippet panel()}
 						<div class="mb-2">
-							<legend class="text-surface-400 text-xs font-bold">Sort</legend>
+							<legend class="text-surface-400 text-xs font-bold">{m.docs_sort()}</legend>
 							<div class="mt-1 grid grid-cols-3 gap-1">
 								<button
 									type="button"
 									class={sortButtonClass('name')}
 									onclick={() => toggleSort('name')}
-									title="Name"
+									title={m.docs_name()}
 								>
 									<NameSortIcon class="h-4 w-4" />
 								</button>
@@ -153,7 +153,7 @@
 									type="button"
 									class={sortButtonClass('power')}
 									onclick={() => toggleSort('power')}
-									title="Power"
+									title={m.docs_power()}
 								>
 									<PowerSortIcon class="h-4 w-4" />
 								</button>
@@ -161,14 +161,14 @@
 									type="button"
 									class={sortButtonClass('cooldown')}
 									onclick={() => toggleSort('cooldown')}
-									title="Cooldown"
+									title={m.docs_cooldown()}
 								>
 									<CooldownSortIcon class="h-4 w-4" />
 								</button>
 							</div>
 						</div>
 						<div>
-							<legend class="text-surface-400 text-xs font-bold">Element</legend>
+							<legend class="text-surface-400 text-xs font-bold">{m.docs_element()}</legend>
 							<div class="mt-1 grid grid-cols-4 gap-1">
 								<button
 									type="button"
@@ -202,12 +202,12 @@
 			<table class="table caption-bottom">
 				<thead class="bg-surface-950 sticky top-0 z-10">
 					<tr>
-						<th>Name</th>
-						<th>Code Name</th>
-						<th>Element</th>
+						<th>{m.docs_name()}</th>
+						<th>{m.docs_code_name()}</th>
+						<th>{m.docs_element()}</th>
 						<th class="text-right">CT</th>
 						<th class="text-right">Power</th>
-						<th>Description</th>
+						<th>{m.docs_description()}</th>
 					</tr>
 				</thead>
 				<tbody class="[&>tr]:hover:preset-tonal-primary">

@@ -128,16 +128,16 @@
 					controlHover="hover:bg-secondary-500/25"
 				>
 					{#snippet lead()}<SlidersHorizontal class="h-4 w-4" />{/snippet}
-					{#snippet control()}<span class="text-sm font-bold">Filter & Sort</span>{/snippet}
+					{#snippet control()}<span class="text-sm font-bold">{m.docs_filter_sort()}</span>{/snippet}
 					{#snippet panel()}
 						<div class="mb-2">
-							<legend class="text-surface-400 text-xs font-bold">Sort</legend>
+							<legend class="text-surface-400 text-xs font-bold">{m.docs_sort()}</legend>
 							<div class="mt-1 grid grid-cols-4 gap-1">
 								<button
 									type="button"
 									class={sortButtonClass('name')}
 									onclick={() => toggleSort('name')}
-									title="Name"
+									title={m.docs_name()}
 								>
 									<NameSortIcon class="h-4 w-4" />
 								</button>
@@ -145,7 +145,7 @@
 									type="button"
 									class={sortButtonClass('tier')}
 									onclick={() => toggleSort('tier')}
-									title="Tier"
+									title={m.docs_tier()}
 								>
 									<TierSortIcon class="h-4 w-4" />
 								</button>
@@ -153,7 +153,7 @@
 									type="button"
 									class={sortButtonClass('level-cap')}
 									onclick={() => toggleSort('level-cap')}
-									title="Level Cap"
+									title={m.docs_level_cap()}
 								>
 									<LevelCapSortIcon class="h-4 w-4" />
 								</button>
@@ -161,14 +161,14 @@
 									type="button"
 									class={sortButtonClass('cost')}
 									onclick={() => toggleSort('cost')}
-									title="Cost"
+									title={m.docs_cost()}
 								>
 									<CostSortIcon class="h-4 w-4" />
 								</button>
 							</div>
 						</div>
 						<div>
-							<legend class="text-surface-400 text-xs font-bold">Filter</legend>
+							<legend class="text-surface-400 text-xs font-bold">{m.filter({ count: 1 })}</legend>
 							<div class="mt-1 grid grid-cols-3 gap-1">
 								<button
 									type="button"
@@ -234,19 +234,19 @@
 			<div class="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3">
 				{#if selectedTech.details.cost}
 					<div class="bg-surface-900 rounded-md p-3">
-						<span class="text-surface-500 text-xs">Cost</span>
+						<span class="text-surface-500 text-xs">{m.docs_cost()}</span>
 						<p class="text-lg font-semibold">{selectedTech.details.cost}</p>
 					</div>
 				{/if}
 				{#if selectedTech.details.level_cap}
 					<div class="bg-surface-900 rounded-md p-3">
-						<span class="text-surface-500 text-xs">Level Cap</span>
+						<span class="text-surface-500 text-xs">{m.docs_level_cap()}</span>
 						<p class="text-lg font-semibold">{selectedTech.details.level_cap}</p>
 					</div>
 				{/if}
 				{#if selectedTech.details.work_amount}
 					<div class="bg-surface-900 rounded-md p-3">
-						<span class="text-surface-500 text-xs">Work Amount</span>
+						<span class="text-surface-500 text-xs">{m.docs_work_amount()}</span>
 						<p class="text-sm">{selectedTech.details.work_amount}</p>
 					</div>
 				{/if}
@@ -254,7 +254,7 @@
 
 			{#if selectedTech.details.materials && Object.keys(selectedTech.details.materials).length > 0}
 				<div class="mt-5">
-					<h3 class="text-surface-400 mb-2 text-sm font-semibold">Materials</h3>
+					<h3 class="text-surface-400 mb-2 text-sm font-semibold">{m.docs_materials()}</h3>
 					<div class="flex flex-wrap gap-2">
 						{#each Object.entries(selectedTech.details.materials) as [mat, count]}
 							<span class="bg-surface-900 rounded-md px-3 py-1 text-sm">
@@ -267,7 +267,7 @@
 
 			{#if selectedTech.details.unlock_build_objects && selectedTech.details.unlock_build_objects.length > 0}
 				<div class="mt-5">
-					<h3 class="text-surface-400 mb-2 text-sm font-semibold">Unlocks Buildings</h3>
+					<h3 class="text-surface-400 mb-2 text-sm font-semibold">{m.docs_unlocks_buildings()}</h3>
 					<div class="grid grid-cols-3 2xl:grid-cols-5 gap-2">
 						{#each selectedTech.details.unlock_build_objects as obj}
 							{@const buildingData = buildingsData.getByKey(obj)!}
@@ -288,7 +288,7 @@
 			{/if}
 			{#if selectedTech.details.unlock_item_recipes && selectedTech.details.unlock_item_recipes.length > 0}
 				<div class="mt-5">
-					<h3 class="text-surface-400 mb-2 text-sm font-semibold">Unlocks Item Recipes</h3>
+					<h3 class="text-surface-400 mb-2 text-sm font-semibold">{m.docs_unlocks_item_recipes()}</h3>
 					<div class="grid grid-cols-3 2xl:grid-cols-5 gap-2">
 						{#each selectedTech.details.unlock_item_recipes as recipe}
 							{@const itemData = itemsData.getByKey(recipe)!}
@@ -309,7 +309,7 @@
 			{/if}
 		{:else}
 			<div class="text-surface-500 flex h-full items-center justify-center">
-				<p>Select a technology to view details</p>
+				<p>{m.docs_select_technology()}</p>
 			</div>
 		{/if}
 	</div>

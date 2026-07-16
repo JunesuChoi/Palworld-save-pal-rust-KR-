@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from '$i18n/messages';
 	import { palsData, elementsData, activeSkillsData } from '$lib/data';
 	import { WikiSearch } from '$components/docs';
 	import { ASSET_DATA_PATH } from '$lib/constants';
@@ -151,12 +152,12 @@
 					controlHover="hover:bg-secondary-500/25"
 				>
 					{#snippet lead()}<SlidersHorizontal class="h-4 w-4" />{/snippet}
-					{#snippet control()}<span class="text-sm font-bold">Filter & Sort</span>{/snippet}
+					{#snippet control()}<span class="text-sm font-bold">{m.docs_filter_sort()}</span>{/snippet}
 					{#snippet panel()}
 						<div class="mb-2">
-							<legend class="text-xs font-bold text-surface-400">Sort</legend>
+							<legend class="text-xs font-bold text-surface-400">{m.docs_sort()}</legend>
 							<div class="mt-1 grid grid-cols-2 gap-1">
-								<button type="button" class={sortButtonClass('name')} onclick={() => toggleSort('name')} title="Name">
+								<button type="button" class={sortButtonClass('name')} onclick={() => toggleSort('name')} title={m.docs_name()}>
 									<NameSortIcon class="h-4 w-4" />
 								</button>
 								<button type="button" class={sortButtonClass('paldeck-index')} onclick={() => toggleSort('paldeck-index')} title="Paldeck #">
@@ -165,7 +166,7 @@
 							</div>
 						</div>
 						<div>
-							<legend class="text-xs font-bold text-surface-400">Element & Type</legend>
+							<legend class="text-xs font-bold text-surface-400">{m.element_and_type()}</legend>
 							<div class="mt-1 grid grid-cols-4 gap-1">
 								<button type="button" class={filterClass('All')} onclick={() => (selectedFilter = 'All')}>
 									<GalleryVerticalEnd class="h-4 w-4" />
@@ -175,12 +176,12 @@
 										<img src={elementIcons[element]} alt={element} class="h-5 w-5" />
 									</button>
 								{/each}
-								<Tooltip label="Alpha / Boss">
+								<Tooltip label={m.alphaPal}>
 									<button type="button" class={filterClass('alpha')} onclick={() => (selectedFilter = 'alpha')}>
 										<img src={staticIcons.alphaIcon} alt="Alpha" class="h-5 w-5" />
 									</button>
 								</Tooltip>
-								<Tooltip label="Human">
+								<Tooltip label={m.docs_human()}>
 									<button type="button" class={filterClass('human')} onclick={() => (selectedFilter = 'human')}>
 										<User class="h-4 w-4" />
 									</button>
@@ -250,21 +251,21 @@
 						<div class="bg-surface-900 rounded-md p-3">
 							<div class="flex gap-2">
 								<img src={staticIcons.hpIcon} alt="HP icon" class="h-4 w-4" />
-								<span class="text-surface-500 text-xs">HP</span>
+								<span class="text-surface-500 text-xs">{m.docs_hp()}</span>
 							</div>
 							<p class="text-lg font-semibold">{selectedPal.scaling.hp}</p>
 						</div>
 						<div class="bg-surface-900 rounded-md p-3">
 							<div class="flex gap-2">
 								<img src={staticIcons.attackIcon} alt="Attack icon" class="h-4 w-4" />
-								<span class="text-surface-500 text-xs">Attack</span>
+								<span class="text-surface-500 text-xs">{m.docs_attack()}</span>
 							</div>
 							<p class="text-lg font-semibold">{selectedPal.scaling.attack}</p>
 						</div>
 						<div class="bg-surface-900 rounded-md p-3">
 							<div class="flex gap-2">
 								<img src={staticIcons.defenseIcon} alt="Defense icon" class="h-4 w-4" />
-								<span class="text-surface-500 text-xs">Defense</span>
+								<span class="text-surface-500 text-xs">{m.docs_defense()}</span>
 							</div>
 							<p class="text-lg font-semibold">{selectedPal.scaling.defense}</p>
 						</div>
@@ -272,42 +273,42 @@
 
 					<div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
 						<div>
-							<span class="text-surface-500 text-xs">Size</span>
+							<span class="text-surface-500 text-xs">{m.docs_size()}</span>
 							<p class="text-sm">{selectedPal.size}</p>
 						</div>
 						<div>
-							<span class="text-surface-500 text-xs">Rarity</span>
+							<span class="text-surface-500 text-xs">{m.docs_rarity()}</span>
 							<p class="text-sm">{selectedPal.rarity}</p>
 						</div>
 						<div>
-							<span class="text-surface-500 text-xs">Food</span>
+							<span class="text-surface-500 text-xs">{m.docs_food()}</span>
 							<p class="text-sm">{selectedPal.food_amount}</p>
 						</div>
 						<div>
-							<span class="text-surface-500 text-xs">Stamina</span>
+							<span class="text-surface-500 text-xs">{m.docs_stamina()}</span>
 							<p class="text-sm">{selectedPal.stamina}</p>
 						</div>
 						<div>
-							<span class="text-surface-500 text-xs">Walk Speed</span>
+							<span class="text-surface-500 text-xs">{m.docs_walk_speed()}</span>
 							<p class="text-sm">{selectedPal.walk_speed}</p>
 						</div>
 						<div>
-							<span class="text-surface-500 text-xs">Run Speed</span>
+							<span class="text-surface-500 text-xs">{m.docs_run_speed()}</span>
 							<p class="text-sm">{selectedPal.run_speed}</p>
 						</div>
 						<div>
-							<span class="text-surface-500 text-xs">Ride Sprint</span>
+							<span class="text-surface-500 text-xs">{m.docs_ride_sprint()}</span>
 							<p class="text-sm">{selectedPal.ride_sprint_speed}</p>
 						</div>
 						<div>
-							<span class="text-surface-500 text-xs">Capture Rate</span>
+							<span class="text-surface-500 text-xs">{m.docs_capture_rate()}</span>
 							<p class="text-sm">{selectedPal.capture_rate_correct}</p>
 						</div>
 					</div>
 
 					{#if workSuits.length > 0}
 						<div class="mt-5">
-							<h3 class="text-surface-400 mb-2 text-sm font-semibold">Work Suitability</h3>
+							<h3 class="text-surface-400 mb-2 text-sm font-semibold">{m.docs_work_suitability()}</h3>
 							<div class="flex flex-wrap gap-2">
 								{#each workSuits as [key, type, level]}
 									{@const iconPath = assetLoader.loadImage(
@@ -326,7 +327,7 @@
 
 					{#if selectedPal.passive_skills.length > 0}
 						<div class="mt-5">
-							<h3 class="text-surface-400 mb-2 text-sm font-semibold">Partner Skills</h3>
+							<h3 class="text-surface-400 mb-2 text-sm font-semibold">{m.docs_partner_skills()}</h3>
 							<div class="flex flex-wrap gap-2">
 								{#each selectedPal.passive_skills as skill}
 									<span class="bg-surface-900 rounded-md px-3 py-1 text-sm">{skill}</span>
@@ -337,7 +338,7 @@
 
 					{#if selectedPal.skill_set && Object.keys(selectedPal.skill_set).length > 0}
 						<div class="mt-5">
-							<h3 class="text-surface-400 mb-2 text-sm font-semibold">Skill Set</h3>
+							<h3 class="text-surface-400 mb-2 text-sm font-semibold">{m.docs_skill_set()}</h3>
 							<div class="flex flex-wrap gap-2">
 								{#each Object.entries(selectedPal.skill_set) as [skill, level]}
 									{@const [_, skillId] = wazaIdFromStr(`EPalWazaID::${skill}`)}
@@ -359,7 +360,7 @@
 			</div>
 		{:else}
 			<div class="text-surface-500 flex h-full items-center justify-center">
-				<p>Select a Pal to view details</p>
+				<p>{m.docs_select_pal()}</p>
 			</div>
 		{/if}
 	</div>

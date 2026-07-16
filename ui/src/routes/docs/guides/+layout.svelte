@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from '$i18n/messages';
 	import { page } from '$app/state';
 	import { Lightbox, TableOfContents } from '$components/docs';
 
@@ -16,9 +17,9 @@
 	}
 
 	const guides = [
-		{ label: 'All Guides', href: '/docs/guides', slug: '' },
-		{ label: 'Server Setup', href: '/docs/guides/server-setup', slug: 'server-setup' },
-		{ label: 'Save Management', href: '/docs/guides/save-management', slug: 'save-management' }
+		{ label: '{m.docs_all_guides()}', href: '/docs/guides', slug: '' },
+		{ label: '{m.docs_server_setup()}', href: '/docs/guides/server-setup', slug: 'server-setup' },
+		{ label: '{m.docs_save_management()}', href: '/docs/guides/save-management', slug: 'save-management' }
 	];
 
 	const activeGuide = $derived.by(() => {

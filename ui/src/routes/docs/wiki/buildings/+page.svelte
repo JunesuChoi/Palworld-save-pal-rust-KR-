@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from '$i18n/messages';
 	import { buildingsData, itemsData } from '$lib/data';
 	import { WikiSearch } from '$components/docs';
 	import { ASSET_DATA_PATH } from '$lib/constants';
@@ -131,16 +132,16 @@
 					controlHover="hover:bg-secondary-500/25"
 				>
 					{#snippet lead()}<SlidersHorizontal class="h-4 w-4" />{/snippet}
-					{#snippet control()}<span class="text-sm font-bold">Filter & Sort</span>{/snippet}
+					{#snippet control()}<span class="text-sm font-bold">{m.docs_filter_sort()}</span>{/snippet}
 					{#snippet panel()}
 						<div class="mb-2">
-							<legend class="text-surface-400 text-xs font-bold">Sort</legend>
+							<legend class="text-surface-400 text-xs font-bold">{m.docs_sort()}</legend>
 							<div class="mt-1 grid grid-cols-3 gap-1">
 								<button
 									type="button"
 									class={sortButtonClass('name')}
 									onclick={() => toggleSort('name')}
-									title="Name"
+									title={m.docs_name()}
 								>
 									<NameSortIcon class="h-4 w-4" />
 								</button>
@@ -148,7 +149,7 @@
 									type="button"
 									class={sortButtonClass('hp')}
 									onclick={() => toggleSort('hp')}
-									title="HP"
+									title={m.docs_hp()}
 								>
 									<HpSortIcon class="h-4 w-4" />
 								</button>
@@ -156,14 +157,14 @@
 									type="button"
 									class={sortButtonClass('rank')}
 									onclick={() => toggleSort('rank')}
-									title="Rank"
+									title={m.docs_rank()}
 								>
 									<RankSortIcon class="h-4 w-4" />
 								</button>
 							</div>
 						</div>
 						<div>
-							<legend class="text-surface-400 text-xs font-bold">Type</legend>
+							<legend class="text-surface-400 text-xs font-bold">{m.docs_type()}</legend>
 							<div class="mt-1 grid grid-cols-3 gap-1">
 								{#each typeFilters as type}
 									<button
@@ -171,7 +172,7 @@
 										class={filterClass(type)}
 										onclick={() => (selectedFilter = type)}
 									>
-										{type === 'All' ? 'All' : type}
+										{type === 'All' ? m.docs_all() : m[`building_type_${type.toLowerCase()}`]()}
 									</button>
 								{/each}
 							</div>
@@ -210,7 +211,7 @@
 				<div>
 					<h2 class="text-2xl font-bold">{selectedBuilding.localized_name}</h2>
 					<span class="text-surface-400 text-sm"
-						>{selectedBuilding.type_a} / {selectedBuilding.type_b}</span
+						>{m[`building_type_${selectedBuilding.type_a.toLowerCase()}`]()} / {selectedBuilding.type_b}</span
 					>
 				</div>
 			</div>
@@ -221,30 +222,30 @@
 
 			<div class="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3">
 				<div class="bg-surface-900 rounded-md p-3">
-					<span class="text-surface-500 text-xs">Rank</span>
+					<span class="text-surface-500 text-xs">{m.docs_rank()}</span>
 					<p class="text-sm">{selectedBuilding.rank}</p>
 				</div>
 				<div class="bg-surface-900 rounded-md p-3">
-					<span class="text-surface-500 text-xs">HP</span>
+					<span class="text-surface-500 text-xs">{m.docs_hp()}</span>
 					<p class="text-sm">{selectedBuilding.hp}</p>
 				</div>
 				<div class="bg-surface-900 rounded-md p-3">
-					<span class="text-surface-500 text-xs">Defense</span>
+					<span class="text-surface-500 text-xs">{m.docs_defense()}</span>
 					<p class="text-sm">{selectedBuilding.defense}</p>
 				</div>
 				<div class="bg-surface-900 rounded-md p-3">
-					<span class="text-surface-500 text-xs">Work Amount</span>
+					<span class="text-surface-500 text-xs">{m.docs_work_amount()}</span>
 					<p class="text-sm">{selectedBuilding.required_build_work_amount}</p>
 				</div>
 				<div class="bg-surface-900 rounded-md p-3">
-					<span class="text-surface-500 text-xs">Deterioration</span>
+					<span class="text-surface-500 text-xs">{m.docs_deterioration()}</span>
 					<p class="text-sm">{selectedBuilding.deterioration_damage}</p>
 				</div>
 			</div>
 
 			{#if selectedBuilding.materials && selectedBuilding.materials.length > 0}
 				<div class="mt-5">
-					<h3 class="text-surface-400 mb-2 text-sm font-semibold">Materials</h3>
+					<h3 class="text-surface-400 mb-2 text-sm font-semibold">{m.docs_materials()}</h3>
 					<div class="flex flex-wrap gap-2">
 						{#each selectedBuilding.materials as mat}
 							{@const itemData = itemsData.getByKey(mat.id)!}
@@ -262,7 +263,7 @@
 			{/if}
 		{:else}
 			<div class="text-surface-500 flex h-full items-center justify-center">
-				<p>Select a building to view details</p>
+				<p>{m.docs_select_building()}</p>
 			</div>
 		{/if}
 	</div>

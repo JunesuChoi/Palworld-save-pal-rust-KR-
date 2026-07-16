@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from '$i18n/messages';
 	import { elementsData, palsData } from '$lib/data';
 	import { ASSET_DATA_PATH } from '$lib/constants';
 	import { assetLoader } from '$utils';
@@ -108,7 +109,7 @@
 			</div>
 		{:else}
 			<div class="text-surface-500 flex h-full items-center justify-center">
-				<p>Select an element to view details</p>
+				<p>{m.docs_select_element()}</p>
 			</div>
 		{/if}
 	</div>

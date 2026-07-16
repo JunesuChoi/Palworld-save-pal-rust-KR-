@@ -21,7 +21,7 @@
 			id: 'technologies'
 		},
 		{ label: 'Elements', href: '/docs/wiki/elements', id: 'elements' },
-		{ label: 'Work Suitability', href: '/docs/wiki/work-suitability', id: 'work-suitability' }
+		{ label: '{m.docs_work_suitability()}', href: '/docs/wiki/work-suitability', id: 'work-suitability' }
 	];
 
 	const activeCategory = $derived.by(() => {

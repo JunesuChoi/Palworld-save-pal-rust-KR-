@@ -56,7 +56,7 @@
 			description: 'Element types and their properties.'
 		},
 		{
-			label: 'Work Suitability',
+			label: '{m.docs_work_suitability()}',
 			href: '/docs/wiki/work-suitability',
 			icon: Hammer,
 			description: 'Work types and which Pals excel at each.'

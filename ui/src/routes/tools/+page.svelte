@@ -101,11 +101,11 @@
 	);
 
 	const tabs: { id: Tab; label: string; icon: typeof ArrowRightLeft }[] = [
-		{ id: 'convert', label: 'Convert', icon: ArrowRightLeft },
-		{ id: 'gamepass', label: 'GamePass Browser', icon: Gamepad2 },
-		{ id: 'steamid', label: 'Steam ID', icon: Hash },
-		{ id: 'uidswap', label: 'UID Swap', icon: Repeat },
-		{ id: 'transfer', label: 'Player Transfer', icon: Upload }
+		{ id: 'convert', label: () => m.convert(), icon: ArrowRightLeft },
+		{ id: 'gamepass', label: () => m.gamepass_browser(), icon: Gamepad2 },
+		{ id: 'steamid', label: () => m.steam_id(), icon: Hash },
+		{ id: 'uidswap', label: () => m.uid_swap(), icon: Repeat },
+		{ id: 'transfer', label: () => m.player_transfer(), icon: Upload }
 	];
 
 	// --- Convert tab handlers ---
@@ -381,7 +381,7 @@
 					onclick={() => handleTabChange(tab.id)}
 				>
 					<tab.icon size={16} />
-					{tab.label}
+					{tab.label()}
 				</button>
 			{/each}
 		</div>
@@ -411,7 +411,7 @@
 								GamePass → {m.steam()}
 							</h2>
 						</div>
-						<p class="text-surface-400 mb-4 text-sm">Select a save to extract to Steam format</p>
+						<p class="text-surface-400 mb-4 text-sm">{m.docs_select_save_to_extract()}</p>
 						<GamepassBrowser
 							saves={convertGamepassSaves}
 							selectable={true}
@@ -464,7 +464,7 @@
 									</p>
 									<Button variant="primary" onclick={handleConvertLoaded}>
 										<ArrowRightLeft size={16} />
-										<span>Convert</span>
+										<span>{m.convert()}</span>
 									</Button>
 								</div>
 							</Card>
@@ -550,7 +550,7 @@
 								<div class="flex flex-col items-center gap-4 p-4">
 									<Monitor size={48} class="text-surface-400" />
 									<p class="text-surface-300 text-center">
-										Save format conversion requires the desktop app for direct file system access.
+										{m.docs_convert_save_requirement()}
 									</p>
 								</div>
 							</Card>
@@ -578,7 +578,7 @@
 						<div class="flex flex-col items-center gap-4 p-4">
 							<Monitor size={48} class="text-surface-400" />
 							<p class="text-surface-300 text-center">
-								Player transfer requires the desktop app for file system access.
+								{m.docs_transfer_requirement()}
 							</p>
 						</div>
 					</Card>
@@ -593,9 +593,9 @@
 					<section class="w-full">
 						<h2 class="text-surface-100 mb-2 text-center text-2xl font-bold">Player Transfer</h2>
 						<p class="text-surface-400 mb-6 text-center text-sm">
-							Transfer a player's data between saves.
+							{m.docs_transfer_desc()}
 							{#if hasLoadedSave}
-								The currently loaded save will be used as the target.
+								{m.docs_transfer_target_loaded()}
 							{/if}
 						</p>
 
@@ -605,7 +605,7 @@
 									<!-- Source save -->
 									<Card>
 										<div class="flex flex-col items-center gap-4 p-4">
-											<h3 class="text-surface-200 font-semibold">Source Save</h3>
+											<h3 class="text-surface-200 font-semibold">{m.docs_source_save()}</h3>
 											{#if sourceLoaded}
 												<p class="text-sm text-green-400">
 													{sourceWorldName} ({sourcePlayersArray.length} players)
@@ -622,11 +622,11 @@
 												</button>
 											{:else}
 												<p class="text-surface-400 text-center text-sm">
-													Select the save to transfer from
+													{m.docs_select_transfer_source()}
 												</p>
 												<Button variant="primary" onclick={() => handleLoadTransferSave('source')}>
 													<Upload size={16} />
-													<span>Select Source</span>
+													<span>{m.docs_select_source()}</span>
 												</Button>
 											{/if}
 										</div>
@@ -635,7 +635,7 @@
 									<!-- Target save -->
 									<Card>
 										<div class="flex flex-col items-center gap-4 p-4">
-											<h3 class="text-surface-200 font-semibold">Target Save</h3>
+											<h3 class="text-surface-200 font-semibold">{m.docs_target_save()}</h3>
 											{#if hasLoadedSave}
 												<p class="text-sm text-green-400">
 													{appState.saveFile?.world_name ?? 'Loaded save'} ({appState
@@ -658,11 +658,11 @@
 												</button>
 											{:else}
 												<p class="text-surface-400 text-center text-sm">
-													Select the save to transfer into
+													{m.docs_select_transfer_target()}
 												</p>
 												<Button variant="primary" onclick={() => handleLoadTransferSave('target')}>
 													<Upload size={16} />
-													<span>Select Target</span>
+													<span>{m.docs_select_target()}</span>
 												</Button>
 											{/if}
 										</div>
@@ -675,7 +675,7 @@
 										class="mx-auto"
 										onclick={() => (transferStep = 'players')}
 									>
-										Continue to Player Selection
+										{m.docs_continue_to_player()}
 									</Button>
 								{/if}
 							</div>
@@ -691,7 +691,7 @@
 										class="text-surface-400 hover:text-surface-200 text-sm"
 										onclick={resetTransfer}
 									>
-										Start over
+										{m.docs_start_over()}
 									</button>
 								</div>
 
@@ -699,12 +699,12 @@
 									<!-- Source player -->
 									<Card>
 										<div class="flex flex-col gap-3 p-4">
-											<h3 class="text-surface-200 text-sm font-semibold">Source Player</h3>
+											<h3 class="text-surface-200 text-sm font-semibold">{m.docs_source_player()}</h3>
 											<select
 												bind:value={selectedSourcePlayer}
 												class="bg-surface-800 border-surface-600 text-surface-100 focus:border-primary-500 rounded-lg border px-3 py-2 text-sm focus:outline-none"
 											>
-												<option value="">Select player...</option>
+												<option value="">{m.docs_select_player_placeholder()}</option>
 												{#each sourcePlayersArray as player}
 													<option value={player.uid}>
 														{player.nickname} (Lv.{player.level ?? '?'})
@@ -717,12 +717,12 @@
 									<!-- Target player -->
 									<Card>
 										<div class="flex flex-col gap-3 p-4">
-											<h3 class="text-surface-200 text-sm font-semibold">Target Player</h3>
+											<h3 class="text-surface-200 text-sm font-semibold">{m.docs_target_player()}</h3>
 											<select
 												bind:value={selectedTargetPlayer}
 												class="bg-surface-800 border-surface-600 text-surface-100 focus:border-primary-500 rounded-lg border px-3 py-2 text-sm focus:outline-none"
 											>
-												<option value="">New player (spawn in)</option>
+												<option value="">{m.docs_new_player_spawn()}</option>
 												{#each targetPlayersArray as player}
 													<option value={player.uid}>
 														{player.nickname} (Lv.{player.level ?? '?'})
@@ -730,7 +730,7 @@
 												{/each}
 											</select>
 											<span class="text-surface-500 text-xs">
-												Leave as "New player" to add without overwriting
+												{m.docs_leave_new_player_desc()}
 											</span>
 										</div>
 									</Card>
@@ -739,9 +739,9 @@
 								<!-- Transfer options -->
 								<Card>
 									<div class="flex flex-col gap-3 p-4">
-										<h3 class="text-surface-200 text-sm font-semibold">Transfer Options</h3>
+										<h3 class="text-surface-200 text-sm font-semibold">{m.docs_transfer_options()}</h3>
 										<div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
-											{#each [{ key: 'character', label: 'Character' }, { key: 'inventory', label: 'Inventory' }, { key: 'pals', label: 'Pals' }, { key: 'tech', label: 'Technology' }, { key: 'appearance', label: 'Appearance' }] as opt}
+											{#each [{ key: 'character', label: m.docs_character() }, { key: 'inventory', label: m.docs_inventory() }, { key: 'pals', label: m.pal({ count: 2 }) }, { key: 'tech', label: m.technologies() }, { key: 'appearance', label: m.docs_appearance() }] as opt}
 												<label class="text-surface-300 flex items-center gap-2 text-sm">
 													<input
 														type="checkbox"
@@ -762,7 +762,7 @@
 									disabled={!selectedSourcePlayer}
 								>
 									<Upload size={16} />
-									<span>Transfer Player</span>
+									<span>{m.player_transfer()}</span>
 								</Button>
 							</div>
 						{:else if transferStep === 'done'}
@@ -776,7 +776,7 @@
 									{#if transferResult?.error}
 										<p class="text-center text-red-400">{transferResult.error}</p>
 									{/if}
-									<Button variant="neutral" onclick={resetTransfer}>Transfer Another</Button>
+									<Button variant="neutral" onclick={resetTransfer}>{m.docs_transfer_another()}</Button>
 								</div>
 							</Card>
 						{/if}
@@ -793,7 +793,7 @@
 						<div class="flex flex-col items-center gap-4 p-4">
 							<HardDrive size={48} class="text-surface-400" />
 							<p class="text-surface-300 text-center">
-								Load a save file first to swap player UIDs.
+								{m.docs_load_save_first_swap()}
 							</p>
 						</div>
 					</Card>
@@ -808,22 +808,21 @@
 					<section class="w-full">
 						<h2 class="text-surface-100 mb-2 text-center text-2xl font-bold">Player UID Swap</h2>
 						<p class="text-surface-400 mb-6 text-center text-sm">
-							Swap UIDs between two players. Useful for co-op to dedicated server migration,
-							platform changes, or UID reassignment.
+							{m.docs_swap_desc()}
 						</p>
 
 						<Card class="mx-auto max-w-lg">
 							<div class="flex flex-col gap-4 p-4">
 								<div class="flex flex-col gap-2">
 									<label for="swap-player-a" class="text-surface-300 text-sm font-medium">
-										Player A
+										{m.docs_player_a()}
 									</label>
 									<select
 										id="swap-player-a"
 										bind:value={swapPlayerA}
 										class="bg-surface-800 border-surface-600 text-surface-100 focus:border-primary-500 rounded-lg border px-3 py-2 text-sm focus:outline-none"
 									>
-										<option value="">Select player...</option>
+										<option value="">{m.docs_select_player_placeholder()}</option>
 										{#each appState.playerSummariesArray as player}
 											<option value={player.uid} disabled={player.uid === swapPlayerB}>
 												{player.nickname} (Lv.{player.level ?? '?'}) — {player.uid.substring(0, 8)}
@@ -838,14 +837,14 @@
 
 								<div class="flex flex-col gap-2">
 									<label for="swap-player-b" class="text-surface-300 text-sm font-medium">
-										Player B
+										{m.docs_player_b()}
 									</label>
 									<select
 										id="swap-player-b"
 										bind:value={swapPlayerB}
 										class="bg-surface-800 border-surface-600 text-surface-100 focus:border-primary-500 rounded-lg border px-3 py-2 text-sm focus:outline-none"
 									>
-										<option value="">Select player...</option>
+										<option value="">{m.docs_select_player_placeholder()}</option>
 										{#each appState.playerSummariesArray as player}
 											<option value={player.uid} disabled={player.uid === swapPlayerA}>
 												{player.nickname} (Lv.{player.level ?? '?'}) — {player.uid.substring(0, 8)}
@@ -857,15 +856,14 @@
 								{#if showSwapConfirm}
 									<div class="bg-surface-900 rounded-lg border border-yellow-600/50 p-3">
 										<p class="mb-3 text-sm text-yellow-400">
-											This will swap all UID references between these two players, including
-											ownership of pals, structures, and guild membership. Are you sure?
+											{m.docs_swap_confirm_msg()}
 										</p>
 										<div class="flex justify-end gap-2">
 											<Button variant="neutral" size="sm" onclick={() => (showSwapConfirm = false)}>
 												Cancel
 											</Button>
 											<Button variant="primary" size="sm" onclick={handleSwapUids}>
-												Confirm Swap
+												{m.docs_confirm_swap()}
 											</Button>
 										</div>
 									</div>
@@ -876,7 +874,7 @@
 										disabled={!swapPlayerA || !swapPlayerB || swapPlayerA === swapPlayerB}
 									>
 										<Repeat size={16} />
-										<span>Swap UIDs</span>
+										<span>{m.uid_swap()}</span>
 									</Button>
 								{/if}
 
@@ -904,16 +902,16 @@
 		{#if activeTab === 'steamid'}
 			<div class="flex flex-col gap-8">
 				<section class="w-full">
-					<h2 class="text-surface-100 mb-2 text-center text-2xl font-bold">Steam ID Converter</h2>
+					<h2 class="text-surface-100 mb-2 text-center text-2xl font-bold">{m.steam_id()} {m.convert()}</h2>
 					<p class="text-surface-400 mb-6 text-center text-sm">
-						Convert a Steam ID to Palworld UID and NoSteam UID
+						{m.docs_steam_id_converter_desc()}
 					</p>
 
 					<Card class="mx-auto max-w-lg">
 						<div class="flex flex-col gap-4 p-4">
 							<div class="flex flex-col gap-2">
 								<label for="steam-input" class="text-surface-300 text-sm font-medium">
-									Steam ID or Profile URL
+									{m.docs_steam_id_profile_url()}
 								</label>
 								<div class="flex gap-2">
 									<input
@@ -933,12 +931,12 @@
 											<Spinner />
 										{:else}
 											<Hash size={16} />
-											<span>Convert</span>
+											<span>{m.convert()}</span>
 										{/if}
 									</Button>
 								</div>
 								<span class="text-surface-500 text-xs">
-									Accepts: numeric Steam ID, steam_ prefix, profile URL, or Palworld UID
+									{m.docs_steam_id_accepts()}
 								</span>
 							</div>
 

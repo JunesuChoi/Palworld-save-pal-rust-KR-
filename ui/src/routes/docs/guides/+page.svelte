@@ -5,13 +5,13 @@
 
 	const guides = [
 		{
-			title: 'Server Setup',
+			title: '{m.docs_server_setup()}',
 			description: 'Configure and manage dedicated Palworld servers.',
 			href: '/docs/guides/server-setup',
 			icon: Server
 		},
 		{
-			title: 'Save Management',
+			title: '{m.docs_save_management()}',
 			description: 'Understand save file formats, backups, and conversions.',
 			href: '/docs/guides/save-management',
 			icon: HardDrive

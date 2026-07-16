@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from '$i18n/messages';
 	import { FileDropzone, Monaco, Spinner, Stopwatch } from '$components/ui';
 	import { getToastState } from '$states';
 	import { Save, X, WrapText } from 'lucide-svelte';
@@ -106,22 +107,22 @@
 {#if content}
 	<div class="editor-wrapper">
 		<div class="toolbar">
-			<button class="toolbar-btn" title="Save SAV file" onclick={handleSave}>
+			<button class="toolbar-btn" title={m.editor_save_sav_title()} onclick={handleSave}>
 				<Save size={18} />
-				<span>Save</span>
+				<span>{m.save({ count: 1 })}</span>
 			</button>
 			<button
 				class="toolbar-btn"
 				class:active={formatted}
-				title={formatted ? 'Minify JSON' : 'Format JSON'}
+				title={formatted ? m.editor_minify_json_title() : m.editor_format_json_title()}
 				onclick={toggleFormatting}
 			>
 				<WrapText size={18} />
-				<span>Format</span>
+				<span>{m.editor_format_btn()}</span>
 			</button>
-			<button class="toolbar-btn" title="Close file" onclick={handleClose}>
+			<button class="toolbar-btn" title={m.editor_close_file_title()} onclick={handleClose}>
 				<X size={18} />
-				<span>Close</span>
+				<span>{m.editor_close_btn()}</span>
 			</button>
 		</div>
 		<div class="editor-container">
@@ -136,8 +137,8 @@
 		{:else}
 			<FileDropzone baseClass="w-1/2 hover:bg-surface-800" name="file" accept=".sav" bind:files>
 				{#snippet message()}
-					<h3 class="h3">Edit SAV</h3>
-					<span>Drag and drop a *.sav file here</span>
+					<h3 class="h3">{m.editor_edit_sav_header()}</h3>
+					<span>{m.editor_drag_drop_sav_msg()}</span>
 				{/snippet}
 			</FileDropzone>
 		{/if}

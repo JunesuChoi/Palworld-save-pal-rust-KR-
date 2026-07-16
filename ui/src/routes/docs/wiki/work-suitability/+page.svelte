@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from '$i18n/messages';
 	import { workSuitabilityData, palsData } from '$lib/data';
 	import type { WorkSuitability } from '$types';
 	import { ASSET_DATA_PATH } from '$lib/constants';
@@ -92,7 +93,7 @@
 			</div>
 		{:else}
 			<div class="text-surface-500 flex h-full items-center justify-center">
-				<p>Select a work type to view details</p>
+				<p>{m.docs_select_work_suitability()}</p>
 			</div>
 		{/if}
 	</div>

@@ -104,16 +104,16 @@
 					controlHover="hover:bg-secondary-500/25"
 				>
 					{#snippet lead()}<SlidersHorizontal class="h-4 w-4" />{/snippet}
-					{#snippet control()}<span class="text-sm font-bold">Filter & Sort</span>{/snippet}
+					{#snippet control()}<span class="text-sm font-bold">{m.docs_filter_sort()}</span>{/snippet}
 					{#snippet panel()}
 						<div class="mb-2">
-							<legend class="text-surface-400 text-xs font-bold">Sort</legend>
+							<legend class="text-surface-400 text-xs font-bold">{m.docs_sort()}</legend>
 							<div class="mt-1 grid grid-cols-2 gap-1">
 								<button
 									type="button"
 									class={sortButtonClass('name')}
 									onclick={() => toggleSort('name')}
-									title="Name"
+									title={m.docs_name()}
 								>
 									<NameSortIcon class="h-4 w-4" />
 								</button>
@@ -121,14 +121,14 @@
 									type="button"
 									class={sortButtonClass('rank')}
 									onclick={() => toggleSort('rank')}
-									title="Rank"
+									title={m.docs_rank()}
 								>
 									<RankSortIcon class="h-4 w-4" />
 								</button>
 							</div>
 						</div>
 						<div>
-							<legend class="text-surface-400 text-xs font-bold">Rank</legend>
+							<legend class="text-surface-400 text-xs font-bold">{m.docs_rank()}</legend>
 							<div class="mt-1 grid grid-cols-5 gap-1">
 								<button
 									type="button"
@@ -171,11 +171,11 @@
 			<table class="table caption-bottom">
 				<thead class="bg-surface-950 sticky top-0 z-10">
 					<tr>
-						<th>Name</th>
-						<th>Code Name</th>
-						<th>Rank</th>
-						<th>Description</th>
-						<th>Effects</th>
+						<th>{m.docs_name()}</th>
+						<th>{m.docs_code_name()}</th>
+						<th>{m.docs_rank()}</th>
+						<th>{m.docs_description()}</th>
+						<th>{m.docs_effects()}</th>
 					</tr>
 				</thead>
 				<tbody class="[&>tr]:hover:preset-tonal-primary">

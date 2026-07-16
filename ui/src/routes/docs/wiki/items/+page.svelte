@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from '$i18n/messages';
 	import { itemsData } from '$lib/data';
 	import { WikiSearch } from '$components/docs';
 	import { ASSET_DATA_PATH } from '$lib/constants';
@@ -175,16 +176,16 @@
 					controlHover="hover:bg-secondary-500/25"
 				>
 					{#snippet lead()}<SlidersHorizontal class="h-4 w-4" />{/snippet}
-					{#snippet control()}<span class="text-sm font-bold">Filter & Sort</span>{/snippet}
+					{#snippet control()}<span class="text-sm font-bold">{m.docs_filter_sort()}</span>{/snippet}
 					{#snippet panel()}
 						<div class="mb-2">
-							<legend class="text-surface-400 text-xs font-bold">Sort</legend>
+							<legend class="text-surface-400 text-xs font-bold">{m.docs_sort()}</legend>
 							<div class="mt-1 grid grid-cols-3 gap-1">
 								<button
 									type="button"
 									class={sortButtonClass('name')}
 									onclick={() => toggleSort('name')}
-									title="Name"
+									title={m.docs_name()}
 								>
 									<NameSortIcon class="h-4 w-4" />
 								</button>
@@ -192,7 +193,7 @@
 									type="button"
 									class={sortButtonClass('price')}
 									onclick={() => toggleSort('price')}
-									title="Price"
+									title={m.docs_price()}
 								>
 									<PriceSortIcon class="h-4 w-4" />
 								</button>
@@ -200,7 +201,7 @@
 									type="button"
 									class={sortButtonClass('weight')}
 									onclick={() => toggleSort('weight')}
-									title="Weight"
+									title={m.docs_weight()}
 								>
 									<WeightSortIcon class="h-4 w-4" />
 								</button>
@@ -248,14 +249,14 @@
 			<table class="table caption-bottom">
 				<thead class="bg-surface-950 sticky top-0 z-10">
 					<tr>
-						<th>Name</th>
-						<th>Code Name</th>
-						<th>Type</th>
-						<th>Rarity</th>
+						<th>{m.docs_name()}</th>
+						<th>{m.docs_code_name()}</th>
+						<th>{m.docs_type()}</th>
+						<th>{m.rarity()}</th>
 						<th class="text-right">Weight</th>
 						<th class="text-right">Price</th>
 						<th class="text-right">Max Stack</th>
-						<th>Description</th>
+						<th>{m.docs_description()}</th>
 					</tr>
 				</thead>
 				<tbody class="[&>tr]:hover:preset-tonal-primary">
