@@ -19,7 +19,7 @@ if ($env:PATH -notlike "*C:\Users\trsy\.cargo\bin*") {
 }
 
 $tauriCmd = "cargo"
-$tauriArgs = @("tauri", "build", "--bundles", "msi")
+$tauriArgs = @("tauri", "build", "--bundles", "nsis")
 
 # Safely check if tauri cargo command is available without triggering stderr errors
 $cargoList = cargo --list
@@ -34,7 +34,7 @@ foreach ($line in $cargoList) {
 if (-not (Get-Command "cargo-tauri" -ErrorAction SilentlyContinue) -and -not $hasTauri) {
     Write-Host "cargo-tauri not found. Falling back to npx @tauri-apps/cli..."
     $tauriCmd = "npx"
-    $tauriArgs = @("@tauri-apps/cli", "build", "--bundles", "msi")
+    $tauriArgs = @("@tauri-apps/cli", "build", "--bundles", "nsis")
 }
 
 $version = (Select-String -Path "Cargo.toml" -Pattern '^version = "([^"]*)"').Matches[0].Groups[1].Value
@@ -54,9 +54,9 @@ finally { Pop-Location }
 $dist = Join-Path $repoRoot "dist"
 New-Item -ItemType Directory -Force -Path $dist | Out-Null
 
-# MSI installer.
-$msi = Get-ChildItem "target/release/bundle/msi/*.msi" | Select-Object -First 1
-Copy-Item $msi.FullName (Join-Path $dist "PalworldSavePal-KR-$version-windows.msi")
+# EXE installer.
+$nsis = Get-ChildItem "target/release/bundle/nsis/*.exe" | Select-Object -First 1
+Copy-Item $nsis.FullName (Join-Path $dist "PalworldSavePal-KR-$version-windows-installer.exe")
 
 # Portable standalone: exe + ui_build + data in one folder, zipped.
 $staging = Join-Path $dist "PalworldSavePal-KR"
