@@ -25,7 +25,7 @@
 	import type { ValueChangeDetails } from '@zag-js/accordion';
 	import { BicepsFlexed, Brain, Plus, Save } from 'lucide-svelte';
 	import * as m from '$i18n/messages';
-	import { c, p } from '$lib/utils/commonTranslations';
+	import { c } from '$lib/utils/commonTranslations';
 
 	const appState = getAppState();
 
@@ -394,7 +394,7 @@
 {#if appState.selectedPal}
 	<div class="flex h-full overflow-auto p-2">
 		<div class="flex grow flex-col">
-			<div id="pal-header" class="w-full shrink-0 2xl:w-2/3">
+			<div id="pal-header" class="w-3/4 shrink-0 2xl:w-2/3">
 				<PalHeader bind:pal={appState.selectedPal} />
 			</div>
 			<div class="flex grow">
@@ -499,7 +499,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="w-full overflow-auto p-2 2xl:w-1/3">
+		<div class="overflow-auto p-2 w-1/3">
 			<div class="hidden flex-col space-y-2 2xl:flex">
 				<div id="pal-status">
 					<StatusBadge bind:pal={appState.selectedPal} />
@@ -552,12 +552,5 @@
 				</Accordion>
 			</div>
 		</div>
-	</div>
-{:else}
-	<div class="flex w-full flex-col items-center justify-center">
-		<h2 class="h2">{m.select_entity_to_edit({ entity: c.pal })}</h2>
-		<p>
-			{m.select_pal_edit_description(p.pals)}
-		</p>
 	</div>
 {/if}

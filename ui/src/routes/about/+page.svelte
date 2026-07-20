@@ -1,15 +1,32 @@
 <script lang="ts">
 	import { getAppState } from '$states';
-	import { Card, Tooltip, TooltipButton } from '$components/ui';
-	import { Github } from 'lucide-svelte';
+	import { Card, Tooltip } from '$components/ui';
 	import Saitama from '$lib/assets/img/app/saitama.webp';
+	import githubIcon from '$lib/assets/img/app/github.svg';
+	import discordIcon from '$lib/assets/img/app/discord.svg';
+	import buyMeACoffee from '$lib/assets/img/app/buymeacoffee.png';
+	import { send } from '$utils/websocketUtils';
+	import { MessageType } from '$types';
+	import { PUBLIC_DESKTOP_MODE } from '$env/static/public';
 	import { staticIcons } from '$types/icons';
 	import * as m from '$i18n/messages';
+<<<<<<< HEAD
 	import { c } from '$lib/utils/commonTranslations';
 	import { send } from '$lib/utils/websocketUtils';
 	import { MessageType } from '$types';
 
+=======
+	
+>>>>>>> upstream/main
 	const appState = getAppState();
+	const isDesktopMode = PUBLIC_DESKTOP_MODE === 'true';
+
+	function openLink(event: MouseEvent, url: string) {
+		if (isDesktopMode) {
+			event.preventDefault();
+			send(MessageType.OPEN_URL, url);
+		}
+	}
 
 	function tilt(node: HTMLElement) {
 		function onEnter() {
@@ -60,10 +77,43 @@
 						<span>{m.about_check_out()}</span>
 						<button
 							onclick={() => send(MessageType.OPEN_IN_BROWSER, "https://github.com/JunesuChoi/Palworld-save-pal-rust-KR-")}
-							class="text-primary-400 hover:text-primary-300 z-10 hover:underline"><Github /></button
+							class="text-primary-400 hover:text-primary-300 z-10 font-bold hover:underline">GitHub (KR Fork)</button
 						>
-						<span>{m.about_for_more_info()}</span>
 					</div>
+				</div>
+			</Card>
+		</div>
+		<div use:tilt class="card-tilt">
+			<Card>
+				<div class="flex gap-2 w-full justify-between px-4">
+					<button
+						class="z-10 flex flex-col items-center gap-2 transition-opacity hover:opacity-80"
+						onclick={() => send(MessageType.OPEN_IN_BROWSER, "https://github.com/JunesuChoi/Palworld-save-pal-rust-KR-")}
+					>
+						<img src={githubIcon} alt="GitHub" class="h-8 w-8" />
+						<span class="text-xs align-bottom">GitHub (KR)</span>
+					</button>
+					<button
+						class="z-10 flex flex-col items-center gap-2 transition-opacity hover:opacity-80"
+						onclick={() => send(MessageType.OPEN_IN_BROWSER, "https://github.com/oMaN-Rod/palworld-save-pal")}
+					>
+						<img src={githubIcon} alt="GitHub Upstream" class="h-8 w-8" />
+						<span class="text-xs align-bottom">Original Repo</span>
+					</button>
+					<button
+						class="z-10 flex flex-col items-center gap-2 transition-opacity hover:opacity-80"
+						onclick={() => send(MessageType.OPEN_IN_BROWSER, "https://discord.gg/YWZFPy9G8J")}
+					>
+						<img src={discordIcon} alt="Discord" class="h-8 w-8" />
+						<span class="text-xs align-bottom">Discord</span>
+					</button>
+					<button
+						class="z-10 flex flex-col items-center gap-2 transition-opacity hover:opacity-80"
+						onclick={() => send(MessageType.OPEN_IN_BROWSER, "https://buymeacoffee.com/i_am_o")}
+					>
+						<img src={buyMeACoffee} alt="Buy me a coffee" class="h-8" />
+						<span class="text-xs align-bottom">Support Creator</span>
+					</button>
 				</div>
 			</Card>
 		</div>

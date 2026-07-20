@@ -95,7 +95,7 @@ export async function handleMaxOutPal(pal: Pal, player: Player): Promise<void> {
 	if (!pal) return;
 	const appState = getAppState();
 	pal.level = appState.settings.cheat_mode ? 255 : MAX_LEVEL;
-	const maxLevelData = expData.expData[appState.settings.cheat_mode ? '100' : '81'];
+	const maxLevelData = await expData.getExpDataByLevel(pal.level + 1);
 	pal.exp = maxLevelData.PalTotalEXP - maxLevelData.PalNextEXP;
 	editAlpha(pal, true);
 	pal.talent_hp = appState.settings.cheat_mode ? 255 : 100;
@@ -114,7 +114,7 @@ export async function handleMaxOutPal(pal: Pal, player: Player): Promise<void> {
 		pal.stomach = palData.max_full_stomach;
 		for (const [key, value] of Object.entries(palData.work_suitability)) {
 			if (value === 0) continue;
-			pal.work_suitability[key as WorkSuitability] = Math.min(5 - value, 4);
+			pal.work_suitability[key as WorkSuitability] = Math.min(10 - value, 9);
 		}
 	} else {
 		pal.stomach = 150;

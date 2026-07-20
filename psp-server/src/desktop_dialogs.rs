@@ -13,10 +13,23 @@ pub struct FileDialogRequest {
     pub initial_directory: Option<PathBuf>,
 }
 
+/// A "save as" dialog: like `FileDialogRequest` but seeds the dialog with a
+/// suggested file name the user can accept or override.
+pub struct FileSaveRequest {
+    pub filter_name: &'static str,
+    pub filter_extensions: &'static [&'static str],
+    pub suggested_file_name: String,
+    pub initial_directory: Option<PathBuf>,
+}
+
 pub type DialogFuture = Pin<Box<dyn Future<Output = Option<PathBuf>> + Send>>;
+pub type DialogFilesFuture = Pin<Box<dyn Future<Output = Option<Vec<PathBuf>>> + Send>>;
 
 pub trait FileDialogProvider: Send + Sync {
     fn pick_file(&self, request: FileDialogRequest) -> DialogFuture;
+    fn save_file(&self, request: FileSaveRequest) -> DialogFuture;
+    fn pick_folder(&self, initial_directory: Option<PathBuf>) -> DialogFuture;
+    fn pick_files(&self, request: FileDialogRequest) -> DialogFilesFuture;
 }
 
 /// Web mode: dialogs are never invoked; returns None if called anyway.
@@ -24,6 +37,18 @@ pub struct NullDialogProvider;
 
 impl FileDialogProvider for NullDialogProvider {
     fn pick_file(&self, _request: FileDialogRequest) -> DialogFuture {
+        Box::pin(async { None })
+    }
+
+    fn save_file(&self, _request: FileSaveRequest) -> DialogFuture {
+        Box::pin(async { None })
+    }
+
+    fn pick_folder(&self, _initial_directory: Option<PathBuf>) -> DialogFuture {
+        Box::pin(async { None })
+    }
+
+    fn pick_files(&self, _request: FileDialogRequest) -> DialogFilesFuture {
         Box::pin(async { None })
     }
 }
@@ -51,17 +76,122 @@ impl FileDialogProvider for RfdDialogProvider {
                 .map(|handle| handle.path().to_path_buf())
         })
     }
+
+    fn save_file(&self, request: FileSaveRequest) -> DialogFuture {
+        Box::pin(async move {
+            let mut dialog = rfd::AsyncFileDialog::new()
+                .add_filter(request.filter_name, request.filter_extensions)
+                .add_filter("All files", &["*"])
+                .set_file_name(request.suggested_file_name);
+            if let Some(directory) = &request.initial_directory {
+                if directory.is_dir() {
+                    dialog = dialog.set_directory(directory);
+                }
+            }
+            dialog
+                .save_file()
+                .await
+                .map(|handle| handle.path().to_path_buf())
+        })
+    }
+
+    fn pick_folder(&self, initial_directory: Option<PathBuf>) -> DialogFuture {
+        Box::pin(async move {
+            let mut dialog = rfd::AsyncFileDialog::new();
+            if let Some(directory) = &initial_directory {
+                if directory.is_dir() {
+                    dialog = dialog.set_directory(directory);
+                }
+            }
+            dialog
+                .pick_folder()
+                .await
+                .map(|handle| handle.path().to_path_buf())
+        })
+    }
+
+    fn pick_files(&self, request: FileDialogRequest) -> DialogFilesFuture {
+        Box::pin(async move {
+            let mut dialog = rfd::AsyncFileDialog::new()
+                .add_filter(request.filter_name, request.filter_extensions)
+                .add_filter("All files", &["*"]);
+            if let Some(directory) = &request.initial_directory {
+                if directory.is_dir() {
+                    dialog = dialog.set_directory(directory);
+                }
+            }
+            dialog.pick_files().await.map(|handles| {
+                handles
+                    .iter()
+                    .map(|handle| handle.path().to_path_buf())
+                    .collect()
+            })
+        })
+    }
 }
 
 /// Test double: pops pre-queued answers in order; None simulates a canceled dialog.
+/// `pick_file` and `save_file` draw from separate queues.
 pub struct QueuedDialogProvider {
-    queued_responses: Mutex<VecDeque<Option<PathBuf>>>,
+    queued_pick_responses: Mutex<VecDeque<Option<PathBuf>>>,
+    queued_pick_files_responses: Mutex<VecDeque<Option<Vec<PathBuf>>>>,
+    queued_save_responses: Mutex<VecDeque<Option<PathBuf>>>,
+    queued_folder_responses: Mutex<VecDeque<Option<PathBuf>>>,
 }
 
 impl QueuedDialogProvider {
-    pub fn new(responses: Vec<Option<PathBuf>>) -> Self {
+    pub fn new(pick_responses: Vec<Option<PathBuf>>) -> Self {
+        Self::new_with_all(pick_responses, Vec::new(), Vec::new())
+    }
+
+    pub fn new_with_saves(
+        pick_responses: Vec<Option<PathBuf>>,
+        save_responses: Vec<Option<PathBuf>>,
+    ) -> Self {
+        Self::new_with_all(pick_responses, save_responses, Vec::new())
+    }
+
+    /// Folder-pick answers only; `pick_file`/`save_file` queues stay empty.
+    pub fn new_with_folders(folder_responses: Vec<Option<PathBuf>>) -> Self {
+        Self::new_with_all(Vec::new(), Vec::new(), folder_responses)
+    }
+
+    /// Seeds all three queues; each dialog kind draws from its own.
+    pub fn new_with_all(
+        pick_responses: Vec<Option<PathBuf>>,
+        save_responses: Vec<Option<PathBuf>>,
+        folder_responses: Vec<Option<PathBuf>>,
+    ) -> Self {
         Self {
-            queued_responses: Mutex::new(responses.into()),
+            queued_pick_responses: Mutex::new(pick_responses.into()),
+            queued_pick_files_responses: Mutex::new(VecDeque::new()),
+            queued_save_responses: Mutex::new(save_responses.into()),
+            queued_folder_responses: Mutex::new(folder_responses.into()),
+        }
+    }
+
+    /// Multi-file pick answers only; the other three queues stay empty.
+    pub fn new_with_pick_files(pick_files_responses: Vec<Option<Vec<PathBuf>>>) -> Self {
+        Self {
+            queued_pick_responses: Mutex::new(VecDeque::new()),
+            queued_pick_files_responses: Mutex::new(pick_files_responses.into()),
+            queued_save_responses: Mutex::new(VecDeque::new()),
+            queued_folder_responses: Mutex::new(VecDeque::new()),
+        }
+    }
+
+    /// Seeds both the save queue (for export) and the multi-file pick queue
+    /// (for import), so a single provider can drive an export-then-import
+    /// round trip in one test. `pick_file`/`pick_folder` queues stay empty.
+    pub fn new_with_saves_and_pick_files(
+        save_responses: Vec<Option<PathBuf>>,
+        pick_files_responses: Vec<Option<Vec<PathBuf>>>,
+    ) -> Self {
+        Self {
+            queued_pick_responses: Mutex::new(VecDeque::new()),
+            queued_pick_files_responses: Mutex::new(pick_files_responses.into()),
+            queued_save_responses: Mutex::new(save_responses.into()),
+            queued_folder_responses: Mutex::new(VecDeque::new()),
         }
     }
 }
@@ -69,7 +199,37 @@ impl QueuedDialogProvider {
 impl FileDialogProvider for QueuedDialogProvider {
     fn pick_file(&self, _request: FileDialogRequest) -> DialogFuture {
         let response = self
-            .queued_responses
+            .queued_pick_responses
+            .lock()
+            .expect("queued dialog mutex poisoned")
+            .pop_front()
+            .flatten();
+        Box::pin(async move { response })
+    }
+
+    fn save_file(&self, _request: FileSaveRequest) -> DialogFuture {
+        let response = self
+            .queued_save_responses
+            .lock()
+            .expect("queued dialog mutex poisoned")
+            .pop_front()
+            .flatten();
+        Box::pin(async move { response })
+    }
+
+    fn pick_folder(&self, _initial_directory: Option<PathBuf>) -> DialogFuture {
+        let response = self
+            .queued_folder_responses
+            .lock()
+            .expect("queued dialog mutex poisoned")
+            .pop_front()
+            .flatten();
+        Box::pin(async move { response })
+    }
+
+    fn pick_files(&self, _request: FileDialogRequest) -> DialogFilesFuture {
+        let response = self
+            .queued_pick_files_responses
             .lock()
             .expect("queued dialog mutex poisoned")
             .pop_front()
@@ -257,5 +417,50 @@ mod tests {
             provider.pick_file(dialog_request_for("steam", None)).await,
             None
         );
+    }
+
+    #[tokio::test]
+    async fn queued_provider_draws_pick_and_save_from_separate_queues() {
+        let provider = QueuedDialogProvider::new_with_saves(
+            vec![Some(PathBuf::from("/pick/in.json"))],
+            vec![Some(PathBuf::from("/save/out.json"))],
+        );
+        let save_request = FileSaveRequest {
+            filter_name: "Preset Files",
+            filter_extensions: &["json"],
+            suggested_file_name: "out.json".to_string(),
+            initial_directory: None,
+        };
+        assert_eq!(
+            provider.save_file(save_request).await,
+            Some(PathBuf::from("/save/out.json"))
+        );
+        assert_eq!(
+            provider.pick_file(dialog_request_for("steam", None)).await,
+            Some(PathBuf::from("/pick/in.json"))
+        );
+    }
+
+    #[tokio::test]
+    async fn queued_provider_pops_pick_files_in_order() {
+        let provider = QueuedDialogProvider::new_with_pick_files(vec![
+            Some(vec![PathBuf::from("/a.json"), PathBuf::from("/b.zip")]),
+            None,
+        ]);
+        let request = FileDialogRequest {
+            filter_name: "Preset Files",
+            filter_extensions: &["zip", "json"],
+            initial_directory: None,
+        };
+        assert_eq!(
+            provider.pick_files(request).await,
+            Some(vec![PathBuf::from("/a.json"), PathBuf::from("/b.zip")])
+        );
+        let request2 = FileDialogRequest {
+            filter_name: "Preset Files",
+            filter_extensions: &["zip", "json"],
+            initial_directory: None,
+        };
+        assert_eq!(provider.pick_files(request2).await, None);
     }
 }

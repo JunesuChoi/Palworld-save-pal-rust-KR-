@@ -7,7 +7,7 @@ name: Build and Release
 #   PalworldSavePal-<tag>-windows.msi              (MSI installer)
 #   PalworldSavePal-<tag>-windows-standalone.zip   (portable: exe + ui + data)
 #   PalworldSavePal-<tag>-macos.dmg                (DMG)
-#   PalworldSavePal-<tag>-linux.deb                (Debian package)
+#   PalworldSavePal-<tag>-linux.AppImage           (cross-distro AppImage)
 
 on:
   push:
@@ -50,10 +50,12 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Build desktop UI
-        working-directory: palworld-save-pal
+      - name: Install UI deps
+        working-directory: palworld-save-pal/ui
         shell: bash
-        run: bash scripts/build-ui-desktop.sh
+        run: bun install
+        # The frontend itself is built by Tauri's beforeBuildCommand
+        # (bun run build:desktop) during "Build Tauri bundles".
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -109,10 +111,12 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Build desktop UI
-        working-directory: palworld-save-pal
+      - name: Install UI deps
+        working-directory: palworld-save-pal/ui
         shell: bash
-        run: bash scripts/build-ui-desktop.sh
+        run: bun install
+        # The frontend itself is built by Tauri's beforeBuildCommand
+        # (bun run build:desktop) during "Build Tauri bundles".
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -145,7 +149,7 @@ jobs:
           if-no-files-found: error
 
   build-linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout palworld-save-pal
         uses: actions/checkout@v4
@@ -162,10 +166,12 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Build desktop UI
-        working-directory: palworld-save-pal
+      - name: Install UI deps
+        working-directory: palworld-save-pal/ui
         shell: bash
-        run: bash scripts/build-ui-desktop.sh
+        run: bun install
+        # The frontend itself is built by Tauri's beforeBuildCommand
+        # (bun run build:desktop) during "Build Tauri bundles".
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -174,21 +180,34 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: palworld-save-pal
+          prefix-key: "v0-rust-ubuntu-2204"
 
       - name: Install Tauri CLI
-        run: cargo install tauri-cli --version "^2" --locked
+        run: cargo install tauri-cli --version "^2" --locked --force
 
       - name: Build Tauri bundles
         working-directory: palworld-save-pal/psp-desktop
-        run: cargo tauri build --bundles deb
+        run: cargo tauri build --bundles deb,appimage
 
-      - name: Collect and rename installer
+      - name: Strip host-graphics libs from AppImage
+        working-directory: palworld-save-pal
+        run: |
+          appimage=$(ls target/release/bundle/appimage/*.AppImage | head -n 1)
+          bash scripts/appimage-strip-graphics.sh "$appimage"
+
+      - name: Collect and rename installers
         working-directory: palworld-save-pal
         run: |
           tag="${{ github.event.inputs.version || github.ref_name }}"
           mkdir -p dist
           deb=$(ls target/release/bundle/deb/*.deb | head -n 1)
+<<<<<<< HEAD
           cp "$deb" "dist/PalworldSavePal-KR-$tag-linux.deb"
+=======
+          cp "$deb" "dist/PalworldSavePal-$tag-linux.deb"
+          appimage=$(ls target/release/bundle/appimage/*.AppImage | head -n 1)
+          cp "$appimage" "dist/PalworldSavePal-$tag-linux.AppImage"
+>>>>>>> upstream/main
 
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4

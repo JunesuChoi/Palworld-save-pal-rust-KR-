@@ -15,6 +15,8 @@ struct SyncLoadedSaveFilesData {
     r#type: &'static str,
     size: u64,
     has_gps: bool,
+    /// The single fact the WorldOption button gates on, across all three platforms.
+    world_option_present: bool,
 }
 
 /// Frame order is the contract: `get_settings` first, then — only when a save
@@ -49,6 +51,7 @@ pub async fn handle_sync_app_state(ctx: &mut HandlerCtx<'_>) -> Result<(), Handl
         r#type: session.save_type_label,
         size: session.size,
         has_gps: session.gps_available(),
+        world_option_present: session.world_option.is_some(),
     };
     ctx.emitter.emit(MessageType::LoadedSaveFiles, &payload);
     emit_summary_messages(session, ctx.emitter);
@@ -60,8 +63,8 @@ pub struct OpenFolderData {
     pub folder_type: String,
 }
 
-/// `app_root` is the process working directory — the desktop shell sets cwd to
-/// a writable per-user dir at startup, which is where `backups/` is written.
+/// `app_root` is the writable base dir — the desktop shell exports `PSP_APP_ROOT`
+/// pointing at a per-user dir, which is where `backups/` is written.
 pub fn folder_path_for(folder_type: &str, app_root: &Path) -> Option<PathBuf> {
     match folder_type {
         "backups" => Some(app_root.join("backups")),
@@ -95,7 +98,7 @@ pub async fn handle_open_folder(
         // emit a frame a web client would never see the button for.
         return Ok(());
     }
-    let app_root = std::env::current_dir().map_err(psp_core::error::CoreError::Io)?;
+    let app_root = psp_core::paths::app_root();
     let resolved = folder_path_for(&data.folder_type, &app_root);
     match resolved {
         Some(folder_path) if folder_path.exists() => {
@@ -140,10 +143,61 @@ pub async fn handle_open_in_browser(
     Ok(())
 }
 
+/// Only http(s) URLs may be handed to `opener`; anything else (a `file://`
+/// path, a `javascript:` payload, an arbitrary scheme) is refused so a WS
+/// message can't coax the host into launching an unexpected handler.
+fn is_openable_url(url: &str) -> bool {
+    url.starts_with("http://") || url.starts_with("https://")
+}
+
+/// Opens an external URL in the OS default browser. The Tauri webview drops
+/// `<a target="_blank">` navigations, so desktop links route here instead;
+/// `opener::open` hands the URL to the host, escaping the webview.
+pub async fn handle_open_url(
+    data: String,
+    _ctx: &mut HandlerCtx<'_>,
+) -> Result<(), HandlerError> {
+    let url = data.trim();
+    if !is_openable_url(url) {
+        return Err(HandlerError::Other(format!(
+            "Refusing to open non-http(s) URL: {url}"
+        )));
+    }
+    opener::open(url)
+        .map_err(|open_error| HandlerError::Other(format!("Failed to open URL {url}: {open_error}")))?;
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::test_support::TestContext;
+
+    #[test]
+    fn is_openable_url_accepts_only_http_schemes() {
+        assert!(is_openable_url("http://localhost:5173"));
+        assert!(is_openable_url("https://github.com/oMaN-Rod/palworld-save-pal"));
+        assert!(is_openable_url("https://buymeacoffee.com/i_am_o"));
+
+        assert!(!is_openable_url("file:///etc/passwd"));
+        assert!(!is_openable_url("javascript:alert(1)"));
+        assert!(!is_openable_url("ftp://example.com"));
+        assert!(!is_openable_url("github.com"));
+        assert!(!is_openable_url(""));
+    }
+
+    #[tokio::test]
+    async fn handle_open_url_rejects_non_http_scheme() {
+        let mut test = TestContext::new(|_| {}).await;
+        let mut ctx = HandlerCtx {
+            session: &mut test.session,
+            app: &test.app,
+            emitter: &test.emitter,
+            attachment: None,
+        };
+        let result = handle_open_url("file:///etc/passwd".to_string(), &mut ctx).await;
+        assert!(result.is_err());
+    }
 
     #[tokio::test]
     async fn sync_app_state_without_save_emits_only_settings() {
@@ -243,11 +297,11 @@ mod tests {
             },
         );
 
-        let level = uesave::Save {
-            header: uesave::Header {
+        let level = psp_core::ue::Save {
+            header: psp_core::ue::Header {
                 magic: 0,
                 save_game_version: 0,
-                package_version: uesave::PackageVersion { ue4: 0, ue5: None },
+                package_version: psp_core::ue::PackageVersion { ue4: 0, ue5: None },
                 engine_version_major: 0,
                 engine_version_minor: 0,
                 engine_version_patch: 0,
@@ -255,10 +309,10 @@ mod tests {
                 engine_version: String::new(),
                 custom_version: None,
             },
-            schemas: uesave::PropertySchemas::default(),
-            root: uesave::Root {
+            schemas: psp_core::ue::PropertySchemas::default(),
+            root: psp_core::ue::Root {
                 save_game_type: String::new(),
-                properties: uesave::Properties::default(),
+                properties: psp_core::ue::Properties::default(),
             },
             extra: Vec::new(),
         };

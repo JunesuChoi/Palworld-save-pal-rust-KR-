@@ -174,10 +174,17 @@ define_message_types! {
     LoadServerSave => "load_server_save",
     GetServerStats => "get_server_stats",
     ServerCreationProgress => "server_creation_progress",
+    ImportServer => "import_server",
     // Session persistence
     ReattachSession => "reattach_session",
     EjectSession => "eject_session",
     SessionNotFound => "session_not_found",
+    // World options
+    GetWorldOption => "get_world_option",
+    UpdateWorldOption => "update_world_option",
+    ExportPresets => "export_presets",
+    SaveEditedSav => "save_edited_sav",
+    OpenUrl => "open_url",
 }
 
 #[cfg(test)]
@@ -313,16 +320,25 @@ mod tests {
         "load_server_save",
         "get_server_stats",
         "server_creation_progress",
+        "import_server",
     ];
 
-    /// Session-persistence types, which sit after the other 126 in declaration
-    /// order.
-    const FEATURE_ADDITION_WIRE_NAMES: &[&str] =
-        &["reattach_session", "eject_session", "session_not_found"];
+    /// Session-persistence and world-option types, which sit after the other
+    /// 127 in declaration order.
+    const FEATURE_ADDITION_WIRE_NAMES: &[&str] = &[
+        "reattach_session",
+        "eject_session",
+        "session_not_found",
+        "get_world_option",
+        "update_world_option",
+        "export_presets",
+        "save_edited_sav",
+        "open_url",
+    ];
 
     #[test]
-    fn exactly_126_message_types() {
-        assert_eq!(EXPECTED_WIRE_NAMES.len(), 126);
+    fn exactly_127_message_types() {
+        assert_eq!(EXPECTED_WIRE_NAMES.len(), 127);
         assert_eq!(
             MessageType::ALL.len(),
             EXPECTED_WIRE_NAMES.len() + FEATURE_ADDITION_WIRE_NAMES.len()
@@ -338,6 +354,29 @@ mod tests {
             .copied()
             .collect();
         assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn world_option_message_types_round_trip_wire_names() {
+        assert_eq!(MessageType::GetWorldOption.as_wire(), "get_world_option");
+        assert_eq!(
+            MessageType::UpdateWorldOption.as_wire(),
+            "update_world_option"
+        );
+        assert_eq!(
+            MessageType::from_wire("get_world_option"),
+            Some(MessageType::GetWorldOption)
+        );
+        assert_eq!(
+            MessageType::from_wire("update_world_option"),
+            Some(MessageType::UpdateWorldOption)
+        );
+    }
+
+    #[test]
+    fn open_url_message_round_trips_wire_name() {
+        assert_eq!(MessageType::OpenUrl.as_wire(), "open_url");
+        assert_eq!(MessageType::from_wire("open_url"), Some(MessageType::OpenUrl));
     }
 
     #[test]
