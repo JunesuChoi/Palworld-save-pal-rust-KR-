@@ -98,8 +98,6 @@
 			toast.add(m.editor_failed_to_save());
 		}
 	}
-		}
-	}
 
 	function handleClose() {
 		content = undefined;

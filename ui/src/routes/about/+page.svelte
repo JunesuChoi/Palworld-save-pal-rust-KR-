@@ -10,14 +10,7 @@
 	import { PUBLIC_DESKTOP_MODE } from '$env/static/public';
 	import { staticIcons } from '$types/icons';
 	import * as m from '$i18n/messages';
-<<<<<<< HEAD
 	import { c } from '$lib/utils/commonTranslations';
-	import { send } from '$lib/utils/websocketUtils';
-	import { MessageType } from '$types';
-
-=======
-	
->>>>>>> upstream/main
 	const appState = getAppState();
 	const isDesktopMode = PUBLIC_DESKTOP_MODE === 'true';
 

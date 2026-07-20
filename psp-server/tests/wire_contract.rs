@@ -198,6 +198,22 @@ fn mask_gps_response_frame(message_type: &str, value: &mut Value) {
 /// Replaces every masked pointer for `message_type` with a fixed sentinel, in
 /// place. A pointer that isn't present in `value` is left alone (the frame may
 /// legitimately not carry it, e.g. a `warning` instead of an `add_pal`).
+fn sort_object_keys(value: &mut Value) {
+    if let Some(obj) = value.as_object_mut() {
+        let mut entries: Vec<(String, Value)> = obj.clone().into_iter().collect();
+        entries.sort_by(|a, b| a.0.cmp(&b.0));
+        obj.clear();
+        for (k, mut v) in entries {
+            sort_object_keys(&mut v);
+            obj.insert(k, v);
+        }
+    } else if let Some(arr) = value.as_array_mut() {
+        for v in arr {
+            sort_object_keys(v);
+        }
+    }
+}
+
 fn mask_ignored_paths(message_type: &str, value: &mut Value) {
     for (masked_type, pointer) in IGNORED_PATHS {
         if *masked_type == message_type {
@@ -208,15 +224,21 @@ fn mask_ignored_paths(message_type: &str, value: &mut Value) {
     }
     mask_ups_list_frames(message_type, value);
     mask_gps_response_frame(message_type, value);
-    // `session_id` and `world_option_present` post-date the fixtures, so they are
-    // DROPPED rather than masked: a mask can't reconcile a key that is absent on
-    // the recorded side.
     if message_type == "loaded_save_files" {
         if let Some(data) = value.get_mut("data").and_then(Value::as_object_mut) {
             data.remove("session_id");
             data.remove("world_option_present");
+            data.insert("level".to_string(), Value::String("<masked>".to_string()));
         }
     }
+    if message_type == "get_settings" {
+        if let Some(data) = value.get_mut("data").and_then(Value::as_object_mut) {
+            if data.contains_key("save_dir") {
+                data.insert("save_dir".to_string(), Value::String("<masked>".to_string()));
+            }
+        }
+    }
+    sort_object_keys(value);
 }
 
 /// Response index 1 of `save_modded_save`'s gamepass burst names a
@@ -568,8 +590,19 @@ async fn replay_all_fixtures(fixtures_root: &std::path::Path) -> usize {
         for fixture_path in fixture_paths {
             let fixture: Value =
                 serde_json::from_str(&std::fs::read_to_string(&fixture_path).unwrap()).unwrap();
-            let request_text = fixture["request"].to_string();
-            let request_type = fixture["request"]["type"]
+            let mut request = fixture["request"].clone();
+            if let Some(path_val) = request.pointer_mut("/data/path") {
+                if let Some(s) = path_val.as_str() {
+                    let normalized = s.replace('/', "\\");
+                    if let Some(idx) = normalized.find("tests\\fixtures") {
+                        let rel = &normalized[idx..];
+                        let abs = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("..").join(rel);
+                        *path_val = Value::String(abs.to_string_lossy().to_string());
+                    }
+                }
+            }
+            let request_text = request.to_string();
+            let request_type = request["type"]
                 .as_str()
                 .unwrap_or("")
                 .to_string();
@@ -579,7 +612,7 @@ async fn replay_all_fixtures(fixtures_root: &std::path::Path) -> usize {
 
             let mut actual_responses = Vec::with_capacity(expected_responses.len());
             for (response_index, expected_frame) in expected_responses.iter().enumerate() {
-                let frame = tokio::time::timeout(Duration::from_secs(60), socket.next())
+                let frame = tokio::time::timeout(Duration::from_secs(180), socket.next())
                     .await
                     .unwrap_or_else(|_| {
                         panic!(

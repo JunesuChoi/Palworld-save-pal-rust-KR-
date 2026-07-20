@@ -570,6 +570,8 @@
   "reset": "초기화",
   "restore_hp": "HP 복원",
   "rewards": "보상",
+  "rarity": "희귀도",
+  "alphaPal": "알파 팰",
   "right_click_edit_base": "기지를 마우스 오른쪽 버튼으로 클릭하여 이름을 편집하세요.",
   "save": [
     {

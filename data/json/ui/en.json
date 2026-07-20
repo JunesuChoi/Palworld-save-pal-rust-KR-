@@ -586,6 +586,8 @@
   "raid": "Raid",
   "range": "Range",
   "rare": "Rare",
+  "rarity": "Rarity",
+  "alphaPal": "Alpha Pal",
   "raw": "Raw",
   "read_only": "READ ONLY",
   "ready_to_fill": "Ready to fill {target} with {count} {pals}.",
