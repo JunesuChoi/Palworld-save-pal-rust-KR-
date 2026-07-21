@@ -55,7 +55,7 @@ $dist = Join-Path $repoRoot "dist"
 New-Item -ItemType Directory -Force -Path $dist | Out-Null
 
 # EXE installer.
-$nsis = Get-ChildItem "target/release/bundle/nsis/*.exe" | Select-Object -First 1
+$nsis = Get-ChildItem "target/release/bundle/nsis/*.exe" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
 Copy-Item $nsis.FullName (Join-Path $dist "PalworldSavePal-KR-$version-windows-installer.exe")
 
 # Portable standalone: exe + ui_build + data in one folder, zipped.

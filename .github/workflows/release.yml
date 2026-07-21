@@ -79,7 +79,7 @@ jobs:
           $tag = "${{ github.event.inputs.version || github.ref_name }}"
           New-Item -ItemType Directory -Force dist | Out-Null
           # EXE installer.
-          $nsis = Get-ChildItem target/release/bundle/nsis/*.exe | Select-Object -First 1
+          $nsis = Get-ChildItem target/release/bundle/nsis/*.exe | Sort-Object LastWriteTime -Descending | Select-Object -First 1
           Copy-Item $nsis.FullName "dist/PalworldSavePal-KR-$tag-windows-installer.exe"
           # Portable standalone: exe + ui_build + data in one folder, zipped;
           # extract-and-run (keeps its DB alongside the exe).
